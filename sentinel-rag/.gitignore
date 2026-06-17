@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+
+# Vector store
+chroma_db/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDEs / editors
+.vscode/
+.idea/
+
+# OS files
+*.DS_Store
+Thumbs.db
+
+# App-generated data
+query_history.csv
+data/feedback/
+data/sentinel.db
+
+# Landing site build artifacts
+landing/node_modules/
+landing/.next/
+landing/out/
+
+# Test cache
+.pytest_cache/
+htmlcov/
+.coverage
