@@ -1,0 +1,102 @@
+================================================================================
+FICTIONAL TEST DATA — DO NOT USE FOR CLINICAL DECISIONS
+================================================================================
+DISCLAIMER: This document is entirely fictional and was created solely as
+sample data to test the Sentinel-RAG software pipeline. It does NOT represent
+real medical guidance from any health authority, and the recommendations,
+dosages, thresholds, and interactions below are invented for testing only.
+It must never be used for actual patient care or clinical decision-making.
+================================================================================
+
+SENTINEL HEALTH NETWORK
+Fictional Clinical Protocol GLY-2024
+Management of Type 2 Diabetes Mellitus in Adults (Test Document)
+
+--------------------------------------------------------------------------------
+SECTION 1 — FIRST-LINE THERAPY
+--------------------------------------------------------------------------------
+1.1 Metformin is the recommended first-line pharmacological therapy for adults
+with type 2 diabetes mellitus unless contraindicated. Initiate at 500 mg once
+daily with the evening meal to reduce gastrointestinal intolerance.
+
+1.2 Titrate the metformin dose gradually over 4 to 6 weeks, increasing by
+500 mg per week as tolerated, up to a maximum of 2000 mg per day in divided
+doses.
+
+1.3 First-line therapy should always be combined with structured lifestyle
+intervention, including medical nutrition therapy and at least 150 minutes of
+moderate-intensity physical activity per week.
+
+1.4 If the patient is unable to tolerate metformin, a second-line agent such as
+a fictional-class SGLT2 inhibitor (e.g., "Glucoflozin") or a DPP-4 inhibitor
+(e.g., "Gliptamax") may be considered as initial therapy.
+
+--------------------------------------------------------------------------------
+SECTION 2 — BLOOD GLUCOSE TARGETS
+--------------------------------------------------------------------------------
+2.1 The general glycemic target for most non-pregnant adults is an HbA1c of
+less than 7.0 percent (53 mmol/mol).
+
+2.2 A more relaxed HbA1c target of less than 8.0 percent (64 mmol/mol) is
+appropriate for older adults with multiple comorbidities, limited life
+expectancy, or a history of severe hypoglycemia.
+
+2.3 Recommended fasting plasma glucose target is 80 to 130 mg/dL
+(4.4 to 7.2 mmol/L).
+
+2.4 Recommended postprandial (2-hour) plasma glucose target is less than
+180 mg/dL (10.0 mmol/L).
+
+--------------------------------------------------------------------------------
+SECTION 3 — MONITORING FREQUENCY
+--------------------------------------------------------------------------------
+3.1 Measure HbA1c at least twice per year in patients who are meeting glycemic
+targets and have stable glycemic control.
+
+3.2 Measure HbA1c quarterly (every 3 months) in patients whose therapy has
+changed or who are not meeting glycemic targets.
+
+3.3 Patients on insulin or sulfonylureas should perform self-monitoring of
+blood glucose at a frequency individualized to their regimen and hypoglycemia
+risk.
+
+3.4 Assess renal function (estimated glomerular filtration rate, eGFR) at least
+annually in all patients on metformin, and more frequently if eGFR is below
+60 mL/min/1.73m2.
+
+--------------------------------------------------------------------------------
+SECTION 4 — CONTRAINDICATIONS
+--------------------------------------------------------------------------------
+4.1 Metformin is contraindicated in patients with an eGFR below
+30 mL/min/1.73m2 due to the risk of lactic acidosis.
+
+4.2 Metformin should be temporarily discontinued in patients undergoing
+procedures requiring iodinated contrast media and resumed only after renal
+function has been confirmed stable at 48 hours.
+
+4.3 The fictional SGLT2 inhibitor "Glucoflozin" is contraindicated in patients
+with a history of recurrent genital mycotic infections or volume depletion.
+
+4.4 Sulfonylureas are not recommended as first-line therapy in older adults due
+to an elevated risk of hypoglycemia.
+
+--------------------------------------------------------------------------------
+SECTION 5 — DRUG INTERACTIONS
+--------------------------------------------------------------------------------
+5.1 Concurrent use of metformin with carbonic anhydrase inhibitors (e.g., the
+fictional agent "Acetazol-X") may increase the risk of lactic acidosis; monitor
+closely and consider dose reduction.
+
+5.2 The fictional DPP-4 inhibitor "Gliptamax" should not be combined with the
+fictional GLP-1 receptor agonist "Incretalide", as the combination provides no
+additional benefit and increases gastrointestinal adverse effects.
+
+5.3 Co-administration of SGLT2 inhibitors with loop diuretics increases the risk
+of volume depletion and hypotension; monitor blood pressure and renal function.
+
+5.4 Beta-blockers may mask the adrenergic warning symptoms of hypoglycemia in
+patients treated with insulin or sulfonylureas; counsel patients accordingly.
+
+--------------------------------------------------------------------------------
+END OF FICTIONAL TEST DOCUMENT — NOT FOR CLINICAL USE
+--------------------------------------------------------------------------------
