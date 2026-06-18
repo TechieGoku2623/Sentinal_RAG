@@ -28,6 +28,11 @@ query_history.csv
 data/feedback/
 data/sentinel.db
 
+# Local logs
+eval_run.log
+_pipinstall.log
+*.log
+
 # Landing site build artifacts
 landing/node_modules/
 landing/.next/

@@ -14,12 +14,15 @@ import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from src import config
 from src.api.deps import require_api_key
 from src.api.schemas import (
+    BatchQueryRequest,
+    BatchQueryResponse,
     FeedbackRequest,
     HealthResponse,
     MetricsResponse,
@@ -46,6 +49,7 @@ from src.services.knowledge_service import (
     ingest_uploaded_file,
     remove_document,
 )
+from src.services.batch_queue import create_batch_job, get_job, start_batch_worker, stop_batch_worker
 from src.services.query_service import QuotaExceededError, execute_query
 from src.services.recollection_service import (
     get_due_topics,
@@ -64,12 +68,16 @@ from src.text_utils import extract_clinical_answer
 
 logger = logging.getLogger(__name__)
 
+load_dotenv()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    start_batch_worker()
     logger.info("Sentinel-RAG API started.")
     yield
+    stop_batch_worker()
 
 
 app = FastAPI(
@@ -122,7 +130,13 @@ def query_clinical(
     _: str = Depends(require_api_key),
 ) -> QueryResponse:
     try:
-        result = execute_query(body.query, body.messages, tenant_id=body.tenant_id)
+        result = execute_query(
+            body.query,
+            body.messages,
+            tenant_id=body.tenant_id,
+            latency_mode=body.latency_mode,
+            use_cache=body.use_cache,
+        )
     except QuotaExceededError as exc:
         raise HTTPException(status_code=402, detail=str(exc)) from exc
     except Exception as exc:  # noqa: BLE001
@@ -144,7 +158,36 @@ def query_clinical(
         log_timestamp=str(result.get("log_timestamp", "")),
         sources=result.get("sources") or [],
         messages=result.get("messages") or [],
+        latency_mode=str(result.get("latency_mode", config.LATENCY_MODE)),
+        cache_hit=bool(result.get("cache_hit", False)),
     )
+
+
+@app.post("/v1/query/batch", response_model=BatchQueryResponse)
+def query_batch(
+    body: BatchQueryRequest,
+    _: str = Depends(require_api_key),
+) -> BatchQueryResponse:
+    mode = (body.latency_mode or "fast").lower()
+    if mode not in {"standard", "fast", "bedside"}:
+        raise HTTPException(status_code=400, detail="latency_mode must be standard, fast, or bedside.")
+    try:
+        job = create_batch_job(body.queries, body.tenant_id, latency_mode=mode)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return BatchQueryResponse(**job)
+
+
+@app.get("/v1/query/batch/{job_id}", response_model=BatchQueryResponse)
+def query_batch_status(
+    job_id: str,
+    _: str = Depends(require_api_key),
+) -> BatchQueryResponse:
+    try:
+        job = get_job(job_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Batch job not found.") from exc
+    return BatchQueryResponse(**job)
 
 
 @app.get("/v1/workspace")

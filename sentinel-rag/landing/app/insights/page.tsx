@@ -1,111 +1,213 @@
 import type { Metadata } from "next";
+
 import Link from "next/link";
+
 import { INSIGHT_TOPICS } from "@/content/insights";
-import { NavMotion } from "@/components/NavMotion";
+
+import { Nav } from "@/components/Nav";
+
 import { FadeIn } from "@/components/FadeIn";
+
 import { SITE } from "@/lib/site";
 
+
+
 export const metadata: Metadata = {
+
   title: "Insights · Sentinel-RAG",
+
   description:
-    "LangGraph, HIPAA health data pipelines, and clinical AI safety — thought leadership for AI engineering roles.",
-  keywords: [
-    "LangGraph",
-    "LangChain",
-    "Clinical AI",
-    "HIPAA",
-    "Healthcare AI",
-    "RAG",
-    "AI Safety",
-  ],
+
+    "LangGraph, HIPAA health data pipelines, and clinical AI safety — engineering notes for regulated AI systems.",
+
 };
 
+
+
 export default function InsightsPage() {
+
   return (
-    <div className="min-h-screen">
-      <NavMotion />
-      <div className="gradient-hero px-6 pb-16 pt-24 text-white">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="section-label text-brand-light">Insights</p>
-          <h1 className="mt-2 text-4xl font-bold">Clinical AI engineering in public</h1>
-          <p className="mt-4 text-slate-300">
-            Long-form notes + LinkedIn-ready angles on LangGraph, HIPAA pipelines, and
-            building AI that stops instead of hallucinates.
+
+    <div className="min-h-screen bg-[var(--bg-base)]">
+
+      <Nav />
+
+      <section className="graphite-band border-b border-[var(--color-rule)] px-6 pb-16 pt-16">
+
+        <div className="mx-auto max-w-3xl">
+
+          <p className="section-label text-[var(--color-accent)]">Insights</p>
+
+          <h1 className="font-display mt-2 text-4xl font-semibold text-[var(--color-graphite-ink)]">
+
+            Clinical AI engineering in public
+
+          </h1>
+
+          <p className="mt-4 text-[var(--color-graphite-ink)] opacity-80">
+
+            Long-form notes on LangGraph orchestration, HIPAA-aware pipelines, and building
+
+            systems that stop instead of hallucinate.
+
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/#demo"
-              className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white"
-            >
+
+          <div className="mt-8 flex flex-wrap gap-3">
+
+            <Link href="/#demo" className="btn-primary inline-block">
+
               Watch demo
+
             </Link>
+
             <a
+
               href={SITE.linkedinUrl}
+
               target="_blank"
+
               rel="noopener noreferrer"
-              className="glass rounded-xl px-5 py-2.5 text-sm font-semibold"
+
+              className="btn-secondary inline-block border-white/20 text-[var(--color-graphite-ink)]"
+
             >
+
               Connect on LinkedIn
+
             </a>
+
           </div>
+
         </div>
-      </div>
+
+      </section>
+
+
 
       <div className="mx-auto max-w-3xl px-6 py-16">
+
         {INSIGHT_TOPICS.map((topic, index) => (
+
           <article
+
             key={topic.slug}
+
             id={topic.slug}
-            className={index > 0 ? "mt-20 border-t border-slate-200 pt-20" : ""}
+
+            className={index > 0 ? "mt-20 border-t border-[var(--color-rule)] pt-20" : ""}
+
           >
+
             <FadeIn>
-              <span className="text-xs font-semibold uppercase tracking-widest text-brand">
+
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--color-accent)]">
+
                 Topic {topic.number} · {topic.readMinutes} min read
+
               </span>
-              <h2 className="mt-2 text-2xl font-bold text-navy md:text-3xl">{topic.title}</h2>
-              <p className="mt-2 text-lg text-slate-muted">{topic.subtitle}</p>
-              <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                <strong>LinkedIn angle:</strong> {topic.linkedInAngle}
+
+              <h2 className="font-display mt-2 text-2xl font-semibold text-[var(--color-ink)] md:text-3xl">
+
+                {topic.title}
+
+              </h2>
+
+              <p className="mt-2 text-lg text-[var(--color-ink-2)]">{topic.subtitle}</p>
+
+              <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+
+                <strong>Angle:</strong> {topic.linkedInAngle}
+
               </p>
+
               <div className="mt-4 flex flex-wrap gap-2">
+
                 {topic.tags.map((tag) => (
+
                   <span
+
                     key={tag}
-                    className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600"
+
+                    className="rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-2)] px-3 py-1 text-xs font-medium text-[var(--color-ink-2)]"
+
                   >
+
                     #{tag.replace(/\s+/g, "")}
+
                   </span>
+
                 ))}
+
               </div>
+
             </FadeIn>
 
+
+
             <div className="mt-8 space-y-8">
+
               {topic.sections.map((section) => (
+
                 <FadeIn key={section.heading}>
-                  <h3 className="text-lg font-semibold text-navy">{section.heading}</h3>
-                  <p className="mt-2 leading-relaxed text-slate-700">{section.body}</p>
+
+                  <h3 className="text-lg font-semibold text-[var(--color-ink)]">{section.heading}</h3>
+
+                  <p className="mt-2 leading-relaxed text-[var(--color-ink-2)]">{section.body}</p>
+
                 </FadeIn>
+
               ))}
+
             </div>
+
           </article>
+
         ))}
 
+
+
         <FadeIn>
-          <div className="mt-20 rounded-2xl bg-navy p-8 text-white">
-            <h3 className="text-xl font-semibold">Post on LinkedIn this week</h3>
-            <p className="mt-2 text-slate-300">
-              Use one topic per post. Attach the Loom demo + link to this repo. Recruiters
-              searching LangGraph and clinical AI will find you.
+
+          <div className="surface-card mt-20 p-8">
+
+            <h3 className="font-display text-xl font-semibold text-[var(--color-ink)]">
+
+              Continue on the platform
+
+            </h3>
+
+            <p className="mt-2 text-[var(--color-ink-2)]">
+
+              Open the clinical workspace or read the full documentation suite on GitHub.
+
             </p>
-            <a
-              href="../../docs/LINKEDIN_PLAYBOOK.md"
-              className="mt-4 inline-block text-brand-light hover:underline"
-            >
-              → Copy posts from LINKEDIN_PLAYBOOK.md
-            </a>
+
+            <div className="mt-4 flex flex-wrap gap-3">
+
+              <a href={SITE.workspaceUrl} className="btn-primary inline-block">
+
+                Open workspace
+
+              </a>
+
+              <a href={SITE.docsUrl} className="btn-secondary inline-block" target="_blank" rel="noopener noreferrer">
+
+                Documentation
+
+              </a>
+
+            </div>
+
           </div>
+
         </FadeIn>
+
       </div>
+
     </div>
+
   );
+
 }
+
+

@@ -36,10 +36,6 @@ Enterprise documentation for the Clinical Protocol Guardian platform.
 
 | [END_TO_END.md](END_TO_END.md) | Engineering, DevOps | REST API, audit DB, external ingest, Docker stack |
 
-| [LOOM_DEMO.md](LOOM_DEMO.md) | Personal brand, recruiting | Loom recording script + embed instructions |
-
-| [LINKEDIN_PLAYBOOK.md](LINKEDIN_PLAYBOOK.md) | Personal brand, recruiting | 3 LinkedIn posts for inbound AI roles |
-
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Engineering, security review | Deep dive — LangGraph design, scoring algorithm, ChromaDB schema, LangSmith traces |
 
 | [SAAS_ARCHITECTURE.md](SAAS_ARCHITECTURE.md) | Product, engineering, investors | Top-tier SaaS blueprint — multi-tenancy, billing, onboarding, deployment |

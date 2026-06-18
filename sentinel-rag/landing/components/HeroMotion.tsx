@@ -1,118 +1,149 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { SITE } from "@/lib/site";
-
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.06 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+import { METRICS } from "@/lib/metrics";
+import { SITE, apiDocsUrl } from "@/lib/site";
+import {
+  animateCounter,
+  heroEntrance,
+  prefersReducedMotion,
+  revertAnim,
+  type AnimInstance,
+} from "@/lib/motion/anime";
 
 export function HeroMotion() {
-  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const statRef = useRef<HTMLSpanElement>(null);
+  const animRef = useRef<AnimInstance | null>(null);
+  const counterRef = useRef<AnimInstance | null>(null);
+
+  useEffect(() => {
+    const root = sectionRef.current;
+    if (!root) return;
+
+    if (prefersReducedMotion()) {
+      if (statRef.current) statRef.current.textContent = METRICS.keywordMatch;
+      return;
+    }
+
+    if (statRef.current) {
+      statRef.current.textContent = "0%";
+      counterRef.current = animateCounter(
+        (value) => {
+          if (statRef.current) statRef.current.textContent = `${value}%`;
+        },
+        METRICS.keywordMatchNum,
+        { duration: 1200, delay: 180 },
+      );
+    }
+
+    animRef.current = heroEntrance(root);
+
+    return () => {
+      revertAnim(animRef.current);
+      revertAnim(counterRef.current);
+    };
+  }, []);
 
   return (
-    <section className="gradient-hero relative overflow-hidden px-6 pb-20 pt-14 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03)_0%,transparent_40%)]" />
-
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
-        <motion.div
-          variants={reduce ? undefined : container}
-          initial={reduce ? false : "hidden"}
-          animate="show"
-        >
-          <motion.div
-            variants={reduce ? undefined : item}
-            className="mb-6 flex items-center gap-3"
-          >
-            <Image src="/logo.png" alt="" width={44} height={44} className="rounded-xl" />
-            <span className="rounded-md border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-300">
-              Enterprise Clinical AI
+    <section
+      ref={sectionRef}
+      className="hero-band border-b border-[var(--color-rule)] px-6 pb-16 pt-10"
+    >
+      <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p data-hero-label className="section-label" style={{ opacity: 0 }}>
+            Clinical validation infrastructure
+          </p>
+          <div className="mt-4 flex flex-wrap items-end gap-x-4 gap-y-2">
+            <span
+              ref={statRef}
+              data-hero-stat
+              className="stat-figure"
+              style={{ opacity: 0 }}
+            >
+              {METRICS.keywordMatch}
             </span>
-          </motion.div>
-          <motion.h1
-            variants={reduce ? undefined : item}
-            className="text-4xl font-bold leading-[1.12] tracking-tight md:text-5xl"
+            <h1
+              data-hero-title
+              className="font-display max-w-xl text-3xl font-semibold leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
+              style={{ opacity: 0 }}
+            >
+              keyword match on the eval harness — with explicit flagging when the corpus
+              cannot support an answer.
+            </h1>
+          </div>
+          <p
+            data-hero-body
+            className="mt-5 max-w-xl text-base leading-relaxed text-[var(--color-ink-2)]"
+            style={{ opacity: 0 }}
           >
-            Guideline-grounded clinical AI that refuses to be confidently wrong
-          </motion.h1>
-          <motion.p
-            variants={reduce ? undefined : item}
-            className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 md:text-lg"
-          >
-            Sentinel-RAG validates clinical protocol questions against your guideline
-            corpus — with deterministic confidence scoring, cross-model verification,
-            and human escalation built into every response.
-          </motion.p>
-          <motion.div variants={reduce ? undefined : item} className="mt-9 flex flex-wrap gap-3">
-            <motion.a
+            Sentinel-RAG validates protocol questions against your guideline corpus with
+            deterministic grounding scores, cross-model verification, and human escalation —
+            measured on {METRICS.questions} eval questions, not marketing claims.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              data-hero-action
               href={SITE.workspaceUrl}
-              className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-glow"
-              whileHover={{ y: -1 }}
-              whileTap={{ scale: 0.98 }}
+              className="btn-primary inline-block cursor-pointer"
+              style={{ opacity: 0 }}
             >
               Open clinical workspace
-            </motion.a>
-            <motion.a
+            </a>
+            <a
+              data-hero-action
               href="#platform"
-              className="rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/5"
-              whileHover={{ y: -1 }}
-              whileTap={{ scale: 0.98 }}
+              className="btn-secondary inline-block cursor-pointer"
+              style={{ opacity: 0 }}
             >
-              Explore the platform
-            </motion.a>
-            <motion.a
-              href="#demo"
-              className="rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/5"
-              whileHover={{ y: -1 }}
-              whileTap={{ scale: 0.98 }}
+              Read the pipeline
+            </a>
+            <a
+              data-hero-action
+              href={apiDocsUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost cursor-pointer text-sm font-medium"
+              style={{ opacity: 0 }}
             >
-              Watch demo
-            </motion.a>
-            <motion.a
-              href="/insights"
-              className="rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-colors hover:bg-white/5"
-              whileHover={{ y: -1 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Insights
-            </motion.a>
-          </motion.div>
-        </motion.div>
+              API docs
+            </a>
+          </div>
+        </div>
 
-        <motion.div
-          initial={reduce ? false : { opacity: 0, x: 32 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
+        <div
+          data-hero-panel
+          className="code-panel overflow-hidden"
+          style={{ opacity: 0 }}
         >
-          <div className="overflow-hidden rounded-xl border border-white/10 bg-navy-mid/40 shadow-2xl">
+          <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2 text-[11px] text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-red-400/80" />
+            <span className="h-2 w-2 rounded-full bg-amber-400/80" />
+            <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
+            <span className="ml-2 font-mono">POST /v1/query</span>
+            <span className="ml-auto font-mono text-emerald-300">200 OK</span>
+          </div>
+          <pre className="overflow-x-auto p-4 text-[var(--color-graphite-ink)]">{`{
+  "query": "First-line therapy for type 2 diabetes?",
+  "confidence": 0.91,
+  "validation_verdict": "SUPPORTED",
+  "flagged": false,
+  "latency_mode": "fast",
+  "cache_hit": false,
+  "response_time_ms": 4200
+}`}</pre>
+          <div className="border-t border-white/10 px-4 py-3 text-[11px] text-slate-400">
             <Image
-              src="/demo.gif"
-              alt="Sentinel-RAG demo"
-              width={1100}
-              height={640}
-              unoptimized
-              className="h-auto w-full"
-              priority
+              src="/logo.png"
+              alt="Sentinel-RAG workspace preview"
+              width={900}
+              height={420}
+              className="mt-2 rounded-md border border-white/10 opacity-90"
             />
           </div>
-          {!reduce && (
-            <div className="absolute -bottom-3 -right-3 rounded-lg border border-brand/30 bg-navy px-3 py-1.5 text-[11px] font-semibold text-brand-light shadow-card">
-              Audit-ready confidence scoring
-            </div>
-          )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

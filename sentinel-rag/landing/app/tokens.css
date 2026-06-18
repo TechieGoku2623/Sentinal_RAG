@@ -1,0 +1,91 @@
+/* Elite clinical dark tokens — Sentinel-RAG */
+
+:root {
+  /* Backgrounds */
+  --bg-base: #060D14;
+  --bg-surface: #0C1825;
+  --bg-elevated: #132233;
+  --bg-overlay: #1A2E42;
+
+  /* Brand */
+  --teal: #0EC788;
+  --teal-dim: #0A7A55;
+  --teal-muted: rgba(14, 199, 136, 0.10);
+  --teal-border: rgba(14, 199, 136, 0.25);
+
+  /* Signal */
+  --amber: #F0A500;
+  --amber-muted: rgba(240, 165, 0, 0.10);
+  --red: #E84040;
+  --red-muted: rgba(232, 64, 64, 0.10);
+
+  /* Text */
+  --text-primary: #E8F0F8;
+  --text-secondary: #7A9AB8;
+  --text-muted: #3D5A73;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-default: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.15);
+
+  /* Legacy aliases (components still reference these) */
+  --color-paper: var(--bg-base);
+  --color-paper-2: var(--bg-surface);
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-rule: var(--border-default);
+  --color-accent: var(--teal);
+  --color-accent-ink: var(--bg-base);
+  --color-focus: var(--teal);
+  --color-graphite: var(--bg-surface);
+  --color-graphite-ink: var(--text-primary);
+
+  /* Typography */
+  --font-display: var(--font-syne), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 48px;
+  --text-hero: 72px;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 400ms;
+  --duration-arc: 1400ms;
+  --ease-out: var(--ease-out-expo);
+  --dur-short: var(--duration-base);
+
+  --radius-btn: 6px;
+  --radius-card: 10px;
+
+  /* shadcn bridge */
+  --background: var(--bg-base);
+  --foreground: var(--text-primary);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--teal);
+  --primary-foreground: var(--bg-base);
+  --secondary: var(--bg-elevated);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-elevated);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--bg-elevated);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--red);
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--teal);
+  --radius: 0.625rem;
+}

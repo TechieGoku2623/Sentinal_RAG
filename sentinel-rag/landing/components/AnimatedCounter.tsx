@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import {
+  animateCounter,
+  prefersReducedMotion,
+  revertAnim,
+  type AnimInstance,
+} from "@/lib/motion/anime";
+import { useAnimeInView } from "@/hooks/useAnimeInView";
 
 type AnimatedCounterProps = {
   value: number;
@@ -16,39 +22,31 @@ export function AnimatedCounter({
   decimals = 0,
   className = "",
 }: AnimatedCounterProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(0);
+  const { ref, inView } = useAnimeInView<HTMLSpanElement>({ rootMargin: "-40px" });
+  const animRef = useRef<AnimInstance | null>(null);
 
   useEffect(() => {
-    if (!inView) return;
-    if (reduce) {
-      setDisplay(value);
+    if (!inView || !ref.current) return;
+
+    const el = ref.current;
+
+    const render = (current: number) => {
+      const formatted = decimals > 0 ? current.toFixed(decimals) : current.toString();
+      el.textContent = `${formatted}${suffix}`;
+    };
+
+    if (prefersReducedMotion()) {
+      render(value);
       return;
     }
-    const duration = 1400;
-    const start = performance.now();
-    let frame: number;
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      const current = value * eased;
-      setDisplay(decimals > 0 ? parseFloat(current.toFixed(decimals)) : Math.round(current));
-      if (t < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, value, decimals, reduce]);
 
-  const formatted = decimals > 0 ? display.toFixed(decimals) : display.toString();
+    render(0);
+    animRef.current = animateCounter(render, value, { decimals, duration: 1400 });
 
-  return (
-    <span ref={ref} className={className}>
-      {formatted}
-      {suffix}
-    </span>
-  );
+    return () => revertAnim(animRef.current);
+  }, [inView, value, suffix, decimals]);
+
+  return <span ref={ref} className={className} aria-live="polite" />;
 }
 
 export function AnimatedMetric({
@@ -67,7 +65,7 @@ export function AnimatedMetric({
   const isNumeric = numericValue !== undefined && !Number.isNaN(numericValue);
 
   return (
-    <div className="pro-card p-6">
+    <div className="surface-card metric-card p-6">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-muted">{label}</p>
       <p className="mt-2 font-mono text-3xl font-bold text-navy">
         {isNumeric ? (

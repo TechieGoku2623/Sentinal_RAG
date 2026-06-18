@@ -1,35 +1,52 @@
-# Sentinel-RAG Landing Page
+# Sentinel-RAG landing (Next.js)
 
-Investor- and portfolio-facing marketing site for the Clinical Protocol Guardian platform.
+Portfolio site and **live clinical workspace** for the Clinical Protocol Guardian prototype.
 
-## Quick start
+## Run locally
+
+Terminal 1 — API backend:
 
 ```powershell
-cd landing
+cd ..
+uvicorn src.api.main:app --reload --port 8000
+```
+
+Terminal 2 — Next.js (portfolio + live demo):
+
+```powershell
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+| URL | Purpose |
+| --- | ------- |
+| http://localhost:3000 | Portfolio / investor landing |
+| http://localhost:3000/workspace | **Live demo** (calls FastAPI `/v1/query`) |
+| http://localhost:8000/docs | OpenAPI / integrators |
 
-## Assets
+Copy `.env.example` to `.env.local` if you need a remote API or API key.
 
-Static assets are synced from `../docs/screenshots/` and `../docs/demo.gif`:
+## Deploy (Vercel)
+
+1. Import the `landing/` directory as a Next.js project.
+2. Set `SENTINEL_API_URL` to your hosted FastAPI URL.
+3. Set `SENTINEL_API_KEY` if the API requires it.
+4. Primary demo link for GitHub README: `/workspace`
+
+## Static assets
+
+Brand assets are generated into `../docs/brand/` and copied to `public/`:
 
 ```powershell
-Copy-Item ../docs/screenshots/logo.png public/
-Copy-Item ../docs/screenshots/favicon.ico public/
-Copy-Item ../docs/screenshots/apple-touch-icon.png public/
-Copy-Item ../docs/demo.gif public/
+cd ..
+python scripts/generate_brand_assets.py
 ```
 
-## Deploy
+Demo GIF for the Loom placeholder lives at `public/demo.gif` (generate with `python scripts/generate_demo_gif.py`).
 
-Deploy to Vercel, Netlify, or any static host:
+## Build
 
 ```powershell
 npm run build
-npm run start
+npm start
 ```
-
-The main clinical application remains the Streamlit workspace (`streamlit run app.py`).
