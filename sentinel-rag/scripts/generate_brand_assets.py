@@ -1,6 +1,6 @@
 """Generate Sentinel-RAG brand assets (logo PNG, favicon, apple touch icon).
 
-Outputs to docs/brand/ and copies to docs/screenshots/ and landing/public/.
+Outputs to docs/brand/ and copies to landing/public/.
 """
 
 from __future__ import annotations
@@ -12,14 +12,13 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 BRAND = ROOT / "docs" / "brand"
-SCREENSHOTS = ROOT / "docs" / "screenshots"
 LANDING_PUBLIC = ROOT / "landing" / "public"
 
-NAVY = (10, 22, 40)
-SLATE = (71, 85, 105)
-SLATE_DARK = (51, 65, 85)
-STROKE = (226, 232, 240)
-ACCENT = (14, 165, 233)
+NAVY = (15, 43, 46)
+SLATE = (95, 122, 120)
+SLATE_DARK = (71, 104, 102)
+STROKE = (204, 251, 241)
+ACCENT = (13, 148, 136)
 
 
 def _draw_logo(size: int) -> Image.Image:
@@ -84,7 +83,6 @@ def _save_ico(path: Path, base: Image.Image) -> None:
 
 def main() -> None:
     BRAND.mkdir(parents=True, exist_ok=True)
-    SCREENSHOTS.mkdir(parents=True, exist_ok=True)
     LANDING_PUBLIC.mkdir(parents=True, exist_ok=True)
 
     logo_512 = _draw_logo(512)
@@ -93,26 +91,12 @@ def main() -> None:
     logo_512.resize((180, 180), Image.Resampling.LANCZOS).save(BRAND / "apple-touch-icon.png", "PNG")
     _save_ico(BRAND / "favicon.ico", logo_512)
 
-    svg_src = BRAND / "logo.svg"
-    targets = [
-        SCREENSHOTS / "logo.png",
-        SCREENSHOTS / "favicon.ico",
-        SCREENSHOTS / "apple-touch-icon.png",
-        LANDING_PUBLIC / "logo.png",
-        LANDING_PUBLIC / "favicon.ico",
-        LANDING_PUBLIC / "apple-touch-icon.png",
-    ]
-    shutil.copy2(BRAND / "logo.png", targets[0])
-    shutil.copy2(BRAND / "favicon.ico", targets[1])
-    shutil.copy2(BRAND / "apple-touch-icon.png", targets[2])
-    shutil.copy2(BRAND / "logo.png", targets[3])
-    shutil.copy2(BRAND / "favicon.ico", targets[4])
-    shutil.copy2(BRAND / "apple-touch-icon.png", targets[5])
-    if svg_src.exists():
-        shutil.copy2(svg_src, LANDING_PUBLIC / "logo.svg")
+    shutil.copy2(BRAND / "logo.png", LANDING_PUBLIC / "logo.png")
+    shutil.copy2(BRAND / "favicon.ico", LANDING_PUBLIC / "favicon.ico")
+    shutil.copy2(BRAND / "apple-touch-icon.png", LANDING_PUBLIC / "apple-touch-icon.png")
 
     print(f"Brand assets written to {BRAND}")
-    print(f"Copied to {SCREENSHOTS} and {LANDING_PUBLIC}")
+    print(f"Copied to {LANDING_PUBLIC}")
 
 
 if __name__ == "__main__":

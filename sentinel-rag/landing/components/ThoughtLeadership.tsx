@@ -23,7 +23,7 @@ export function ThoughtLeadership() {
           <StaggerItem key={topic.slug}>
             <Link
               href={`/insights#${topic.slug}`}
-              className="group flex h-full flex-col pro-card p-6"
+              className="group flex h-full flex-col surface-card p-6"
             >
               <span className="text-xs font-semibold uppercase tracking-widest text-brand">
                 Topic {topic.number}
@@ -55,10 +55,7 @@ export function ThoughtLeadership() {
       <FadeIn delay={0.15}>
         <div className="mt-10 rounded-xl border border-brand/20 bg-brand-pale p-6 text-center">
           <p className="text-sm text-slate-700">
-            Copy-ready LinkedIn posts for all three topics:{" "}
-            <a href="../docs/LINKEDIN_PLAYBOOK.md" className="font-semibold text-brand hover:underline">
-              docs/LINKEDIN_PLAYBOOK.md
-            </a>
+            Each article above expands on a core theme from the Sentinel-RAG platform.
           </p>
         </div>
       </FadeIn>

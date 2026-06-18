@@ -117,6 +117,7 @@ class AgentState(TypedDict):
     # Two-model cross-validation.
     validation_verdict: str   # SUPPORTED | PARTIALLY_SUPPORTED | CONTRADICTED | ERROR
     flag_reason: str          # contradicted | retries_exhausted | low_confidence | ""
+    latency_mode: str         # standard | fast | bedside
 
 
 # ---------------------------------------------------------------------------
@@ -191,8 +192,25 @@ def reflect_node(state: AgentState) -> AgentState:
     alignment = score_query_alignment(query, docs)
     corpus_grounded = has_corpus_anchor(query, docs)
     confidence = score_confidence(response, docs, query)
+    latency_mode = state.get("latency_mode", config.LATENCY_MODE)
+    max_retries = config.max_retries_for_mode(latency_mode)
 
-    validation = cross_validate(response, docs, query)
+    if config.skip_cross_validation(
+        latency_mode,
+        confidence=confidence,
+        alignment=alignment,
+        corpus_grounded=corpus_grounded,
+        insufficient_context=insufficient,
+    ):
+        validation = {
+            "verdict": "SUPPORTED",
+            "is_valid": True,
+            "should_flag": False,
+            "confidence": 1.0,
+        }
+        logger.info("Bedside fast-path: skipping cross-validation (heuristic high).")
+    else:
+        validation = cross_validate(response, docs, query)
     verdict = validation.get("verdict", "ERROR")
     logger.info("Validation verdict: %s, query_alignment=%.2f", verdict, alignment)
 
@@ -215,6 +233,7 @@ def reflect_node(state: AgentState) -> AgentState:
         retry_count=retry_count,
         insufficient_context=insufficient,
         corpus_grounded=corpus_grounded,
+        max_retries=max_retries,
     )
 
     if route == "retrieve":
@@ -363,7 +382,12 @@ agent = build_agent()
 # ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
-def run_agent(query: str, messages: List[dict] = None, tenant_id: str | None = None) -> dict:
+def run_agent(
+    query: str,
+    messages: List[dict] = None,
+    tenant_id: str | None = None,
+    latency_mode: str | None = None,
+) -> dict:
     """Run the full self-reflective pipeline for a single query.
 
     Args:
@@ -390,6 +414,7 @@ def run_agent(query: str, messages: List[dict] = None, tenant_id: str | None = N
     messages = messages or []
     conversation_id = str(uuid.uuid4())
     start = time.perf_counter()
+    mode = (latency_mode or config.LATENCY_MODE).lower()
 
     initial_state: AgentState = {
         "query": query,
@@ -405,6 +430,7 @@ def run_agent(query: str, messages: List[dict] = None, tenant_id: str | None = N
         "conversation_id": conversation_id,
         "validation_verdict": "",
         "flag_reason": "",
+        "latency_mode": mode,
     }
 
     try:
@@ -446,5 +472,7 @@ def run_agent(query: str, messages: List[dict] = None, tenant_id: str | None = N
     log_timestamp = log_interaction(result, response_time_ms, tenant_id=tenant_id)
     result["response_time_ms"] = response_time_ms
     result["log_timestamp"] = log_timestamp
+    result["latency_mode"] = mode
+    result["cache_hit"] = False
 
     return result

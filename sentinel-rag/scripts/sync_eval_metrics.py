@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "data" / "eval" / "eval_results.json"
 README = ROOT / "README.md"
-LANDING = ROOT / "landing" / "app" / "page.tsx"
+LANDING_METRICS = ROOT / "landing" / "lib" / "metrics.ts"
 
 
 def _load_summary() -> dict:
@@ -52,27 +52,26 @@ def update_readme(summary: dict) -> None:
 
 
 def update_landing(summary: dict) -> None:
-    text = LANDING.read_text(encoding="utf-8")
-    block = f"""const METRICS = {{
+    kw = int(round(summary["keyword_match_rate"] * 100))
+    conf = int(round(summary["average_confidence"] * 100))
+    agree = int(round(summary["validation_agreement_rate"] * 100))
+    block = f"""/** Eval metrics — synced from data/eval/eval_results.json via scripts/sync_eval_metrics.py */
+
+export const METRICS = {{
   questions: {summary['questions_evaluated']},
   keywordMatch: "{_fmt_pct(summary['keyword_match_rate'])}",
+  keywordMatchNum: {kw},
   avgConfidence: "{_fmt_pct(summary['average_confidence'])}",
+  avgConfidenceNum: {conf},
   flagRate: "{_fmt_pct(summary['flag_rate'])}",
   avgLatency: "{summary['avg_response_time_ms']:.0f}ms",
   validationAgreement: "{_fmt_pct(summary['validation_agreement_rate'])}",
+  validationAgreementNum: {agree},
   note: "Measured by scripts/run_eval.py on {summary.get('generated_at', 'eval run')[:10]} — diabetes-only corpus; unsupported categories correctly flagged.",
-}};"""
-    text, n = re.subn(
-        r"const METRICS = \{[\s\S]*?\};",
-        block,
-        text,
-        count=1,
-    )
-    if n == 0:
-        print("Warning: METRICS block not found in landing page")
-        return
-    LANDING.write_text(text, encoding="utf-8")
-    print(f"Updated {LANDING}")
+}} as const;
+"""
+    LANDING_METRICS.write_text(block, encoding="utf-8")
+    print(f"Updated {LANDING_METRICS}")
 
 
 def main() -> None:

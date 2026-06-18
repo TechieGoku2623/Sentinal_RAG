@@ -27,6 +27,46 @@ HIGH_CONFIDENCE: float = 0.85   # >= this: well grounded, return it
 MED_CONFIDENCE: float = 0.75    # >= this (but < HIGH): retry with more context
 MAX_RETRIES: int = 2            # hard cap on re-retrieval loops before flagging
 
+# ---------------------------------------------------------------------------
+# Performance / latency modes (clinic-scale + bedside)
+# ---------------------------------------------------------------------------
+# standard — full safety pipeline (default)
+# fast     — retrieval cache + query cache + 1 retry max
+# bedside  — cache + 0 retries + skip 2nd LLM when heuristic confidence is high
+LATENCY_MODE: str = "standard"
+
+QUERY_CACHE_ENABLED: bool = True
+QUERY_CACHE_TTL_SECONDS: int = 3600       # 1 hour — common clinic questions
+QUERY_CACHE_MAX_ENTRIES: int = 2000
+
+RETRIEVAL_CACHE_ENABLED: bool = True
+RETRIEVAL_CACHE_MAX_ENTRIES: int = 512
+
+BATCH_WORKER_THREADS: int = 3
+BATCH_INTER_QUERY_DELAY_SECONDS: float = 0.35  # Groq rate-limit spacing
+
+
+def max_retries_for_mode(mode: str | None = None) -> int:
+    """Retry budget by latency mode."""
+    mode = (mode or LATENCY_MODE).lower()
+    return {"standard": MAX_RETRIES, "fast": 1, "bedside": 0}.get(mode, MAX_RETRIES)
+
+
+def skip_cross_validation(
+    mode: str | None,
+    *,
+    confidence: float,
+    alignment: float,
+    corpus_grounded: bool,
+    insufficient_context: bool,
+) -> bool:
+    """Bedside mode: trust strong heuristic scores to skip the 2nd LLM call."""
+    if (mode or LATENCY_MODE).lower() != "bedside":
+        return False
+    if insufficient_context or not corpus_grounded:
+        return False
+    return confidence >= HIGH_CONFIDENCE and alignment >= QUERY_ALIGNMENT_MIN
+
 # Confidence penalties applied by the reflection node.
 PARTIAL_SUPPORT_PENALTY: float = 0.15  # validator says PARTIALLY_SUPPORTED
 OUTDATED_SOURCE_PENALTY: float = 0.10  # oldest source > AGING_YEARS

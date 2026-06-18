@@ -1,150 +1,73 @@
 "use client";
 
-
-
-import { motion, useScroll, useTransform } from "framer-motion";
-
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-
+import { animate, type JSAnimation } from "animejs";
 import { SITE } from "@/lib/site";
+import { MOTION, prefersReducedMotion, revertAnim } from "@/lib/motion/anime";
 
-
+const LINKS = [
+  ["#platform", "Platform"],
+  ["#metrics", "Metrics"],
+  ["#pricing", "Pricing"],
+  ["#faq", "FAQ"],
+  ["#docs", "Docs"],
+] as const;
 
 export function NavMotion() {
+  const headerRef = useRef<HTMLElement>(null);
+  const animRef = useRef<JSAnimation | null>(null);
 
-  const { scrollY } = useScroll();
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
 
-  const bg = useTransform(scrollY, [0, 80], ["rgba(10, 22, 40, 0.94)", "rgba(10, 22, 40, 0.99)"]);
+    const onScroll = () => {
+      header.classList.toggle("nav-bar--scrolled", window.scrollY > 6);
+    };
 
-  const shadow = useTransform(
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
 
-    scrollY,
+    if (!prefersReducedMotion()) {
+      animRef.current = animate(header, {
+        opacity: { from: 0, to: 1 },
+        y: { from: -10, to: 0 },
+        duration: 480,
+        ease: MOTION.ease.out,
+      });
+    }
 
-    [0, 80],
-
-    ["0 0 0 rgba(0,0,0,0)", "0 4px 24px rgba(0,0,0,0.2)"],
-
-  );
-
-
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      revertAnim(animRef.current);
+    };
+  }, []);
 
   return (
-
-    <motion.header
-
-      style={{ backgroundColor: bg, boxShadow: shadow }}
-
-      className="sticky top-0 z-50 border-b border-white/8 backdrop-blur-md"
-
-    >
-
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-
-        <motion.a
-
-          href="#"
-
-          className="flex items-center gap-3"
-
-          whileHover={{ opacity: 0.92 }}
-
-          transition={{ duration: 0.15 }}
-
-        >
-
-          <Image
-
-            src="/logo.png"
-
-            alt="Sentinel-RAG"
-
-            width={36}
-
-            height={36}
-
-            className="rounded-[10px]"
-
-          />
-
+    <header ref={headerRef} className="nav-bar sticky top-0 z-50">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+        <a href="#" className="flex items-center gap-3 transition-opacity hover:opacity-90">
+          <Image src="/logo.png" alt="Sentinel-RAG" width={32} height={32} className="rounded-md" />
           <div>
-
-            <p className="text-sm font-semibold tracking-tight text-white">Sentinel-RAG</p>
-
-            <p className="text-[11px] font-medium text-slate-400">Clinical Protocol Guardian</p>
-
+            <p className="font-display text-sm font-semibold text-[var(--color-ink)]">Sentinel-RAG</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-ink-2)]">
+              Protocol Guardian
+            </p>
           </div>
+        </a>
 
-        </motion.a>
-
-        <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex">
-
-          {[
-
-            ["#demo", "Demo"],
-
-            ["#pricing", "Pricing"],
-
-            ["#platform", "Platform"],
-
-            ["#insights", "Insights"],
-
-            ["#metrics", "Metrics"],
-
-            ["#docs", "Docs"],
-
-          ].map(([href, label]) => (
-
-            <a
-
-              key={href}
-
-              href={href}
-
-              className="font-medium transition-colors hover:text-white"
-
-            >
-
+        <nav className="hidden items-center gap-6 md:flex">
+          {LINKS.map(([href, label]) => (
+            <a key={href} href={href} className="nav-link">
               {label}
-
             </a>
-
           ))}
-
-          <a
-
-            href={SITE.workspaceUrl}
-
-            className="rounded-lg bg-brand px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:opacity-90"
-
-          >
-
+          <a href={SITE.workspaceUrl} className="btn-primary cursor-pointer text-xs">
             Open app
-
           </a>
-
-          <a
-
-            href="https://github.com/devasai/sentinel-rag"
-
-            className="rounded-lg border border-white/15 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/5"
-
-            target="_blank"
-
-            rel="noopener noreferrer"
-
-          >
-
-            GitHub
-
-          </a>
-
         </nav>
-
       </div>
-
-    </motion.header>
-
+    </header>
   );
-
 }
-

@@ -140,6 +140,13 @@ def retrieve_with_metadata(query: str, expanded: bool = False) -> List[dict]:
 
     start = time.perf_counter()
     try:
+        from src.services.retrieval_cache import get_retrieval, set_retrieval
+
+        cached = get_retrieval(query, expanded)
+        if cached is not None:
+            logger.info("Retrieval cache hit (query=%r, expanded=%s).", query[:60], expanded)
+            return cached
+
         child = get_child_collection()
 
         # Nothing ingested yet — let the agent/UI show "no guidelines loaded".
@@ -199,6 +206,7 @@ def retrieve_with_metadata(query: str, expanded: bool = False) -> List[dict]:
         latency_ms = int((time.perf_counter() - start) * 1000)
         logger.info("Retrieval: query=%r num_results=%d latency_ms=%d",
                     query, len(records), latency_ms)
+        set_retrieval(query, expanded, records)
         return records
 
     except Exception as exc:  # noqa: BLE001 - surface a helpful message

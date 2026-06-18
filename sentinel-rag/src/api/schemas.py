@@ -18,6 +18,11 @@ class QueryRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=4000)
     messages: List[dict] = Field(default_factory=list)
     tenant_id: str = "default"
+    latency_mode: Optional[str] = Field(
+        default=None,
+        description="standard | fast | bedside — overrides server default",
+    )
+    use_cache: bool = True
 
 
 class QueryResponse(BaseModel):
@@ -32,6 +37,30 @@ class QueryResponse(BaseModel):
     log_timestamp: str
     sources: List[dict] = Field(default_factory=list)
     messages: List[dict] = Field(default_factory=list)
+    latency_mode: str = "standard"
+    cache_hit: bool = False
+
+
+class BatchQueryRequest(BaseModel):
+    queries: List[str] = Field(..., min_length=1, max_length=100)
+    tenant_id: str = "default"
+    latency_mode: str = Field(
+        default="fast",
+        description="fast recommended for clinic-wide batch jobs",
+    )
+
+
+class BatchQueryResponse(BaseModel):
+    job_id: str
+    tenant_id: str
+    status: str
+    latency_mode: str
+    total: int
+    completed: int
+    results: List[dict] = Field(default_factory=list)
+    error: str = ""
+    created_at: str = ""
+    updated_at: str = ""
 
 
 class WorkspaceCreateRequest(BaseModel):

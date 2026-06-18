@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/screenshots/logo.png" alt="Sentinel-RAG logo" width="88" />
+<img src="docs/brand/logo.png" alt="Sentinel-RAG logo" width="88" />
 
 # Sentinel-RAG
 
@@ -37,7 +37,7 @@ Its core innovation is a *five-layer safety pipeline*: retrieve → generate →
 
 ---
 
-![Demo](docs/demo.gif)
+![Demo preview](docs/brand/logo.png)
 
 *Sentinel-RAG validating clinical protocols with confidence scoring, self-correction, and human escalation*
 
@@ -45,38 +45,27 @@ Its core innovation is a *five-layer safety pipeline*: retrieve → generate →
 
 ## 🌐 Landing page & demo
 
-| Surface | Command | URL |
-| ------- | ------- | --- |
-| **Investor / portfolio site** | `cd landing && npm install && npm run dev` | [http://localhost:3000](http://localhost:3000) |
-| **Clinical workspace (Streamlit)** | `streamlit run app.py` | [http://localhost:8501](http://localhost:8501) |
-| **REST API (FastAPI)** | `uvicorn src.api.main:app --reload --port 8000` | [http://localhost:8000/docs](http://localhost:8000/docs) |
-| **Full stack (Docker)** | `docker compose up --build` | UI `:8501` · API `:8000` |
+| Surface | Best for | Command | URL |
+| ------- | -------- | ------- | --- |
+| **Portfolio site** | GitHub README, recruiters | `cd landing && npm run dev` | [http://localhost:3000](http://localhost:3000) |
+| **Live workspace (Next.js)** | **Public demo — recommended** | API + `npm run dev` (see below) | [http://localhost:3000/workspace](http://localhost:3000/workspace) |
+| **REST API (FastAPI)** | Integrators, Swagger, batch jobs | `uvicorn src.api.main:app --reload --port 8000` | [http://localhost:8000/docs](http://localhost:8000/docs) |
+| **Clinical workspace (Streamlit)** | Internal prototyping, admin flows | `streamlit run app.py` | [http://localhost:8501](http://localhost:8501) |
+| **Full stack (Docker)** | One-command local stack | `docker compose up --build` | UI `:8501` · API `:8000` |
+
+**Recommended GitHub showcase** (professional, not Streamlit-only):
+
+```bash
+uvicorn src.api.main:app --reload --port 8000
+cd landing && npm install && npm run dev
+# Live demo → http://localhost:3000/workspace
+```
+
+Deploy the `landing/` app to Vercel; set `SENTINEL_API_URL` to your hosted FastAPI. See `landing/.env.example`.
 
 End-to-end platform guide: [docs/END_TO_END.md](docs/END_TO_END.md)
 
-Brand assets live in `docs/screenshots/` (`logo.png`, `favicon.ico`, `apple-touch-icon.png`).
-
----
-
-## 🎥 Loom demo + LinkedIn playbook (inbound AI roles)
-
-| Resource | Purpose |
-| -------- | ------- |
-| [docs/LOOM_DEMO.md](docs/LOOM_DEMO.md) | **2-min screen recording script** — what to show and say |
-| [docs/LINKEDIN_PLAYBOOK.md](docs/LINKEDIN_PLAYBOOK.md) | **3 copy-ready posts** for LangGraph / HIPAA / clinical AI recruiter search |
-| Landing `#demo` section | Embed Loom via `landing/.env.local` → `NEXT_PUBLIC_LOOM_EMBED_URL` |
-| [landing/insights](landing/app/insights/page.tsx) | Long-form versions of all three topics |
-
-**Topics (post one per week + attach Loom):**
-1. *Why I built Sentinel-RAG to stop — not hallucinate*
-2. *What 4 months of HIPAA health data pipelines taught me about clinical AI*
-3. *LangGraph vs LangChain — when to use each*
-
-After recording in [Loom](https://www.loom.com), set in `landing/.env.local`:
-```env
-NEXT_PUBLIC_LOOM_EMBED_URL=https://www.loom.com/embed/YOUR_VIDEO_ID
-NEXT_PUBLIC_LOOM_SHARE_URL=https://www.loom.com/share/YOUR_VIDEO_ID
-```
+Brand assets live in `docs/brand/` (`logo.png`, `favicon.ico`, `apple-touch-icon.png`). Regenerate with `python scripts/generate_brand_assets.py`.
 
 ---
 
@@ -122,11 +111,11 @@ NEXT_PUBLIC_LOOM_SHARE_URL=https://www.loom.com/share/YOUR_VIDEO_ID
 | Metric (from `scripts/run_eval.py`) | Value                                  |
 | ----------------------------------- | -------------------------------------- |
 | Questions evaluated                 | 50                                     |
-| Keyword match rate                  | 65%                                |
-| Average confidence                  | 53%                                |
-| Flag rate                           | 100%                               |
-| Average response time               | 25978ms                            |
-| Two-model validation agreement      | 46%                                |
+| Keyword match rate                  | 54%                                |
+| Average confidence                  | 64%                                |
+| Flag rate                           | 60%                                |
+| Average response time               | 41065ms                            |
+| Two-model validation agreement      | 88%                                |
 | Two-model validation                | Cross-checks every response            |
 
 > **Interpreting these numbers:** The bundled corpus is a single fictional **diabetes**
@@ -324,7 +313,7 @@ sentinel-rag/
 │   └── theme.py                 # Premium clinical UI theme and components
 ├── docs/                        # PRD, TRD, app flow, architecture, clinical safety
 │   ├── README.md                # Documentation hub
-│   └── screenshots/             # logo.png, favicon.ico, apple-touch-icon.png
+│   └── brand/                   # logo.png, favicon.ico, apple-touch-icon.png
 ├── .streamlit/
 │   └── config.toml              # Brand colors and Streamlit theme
 ├── app.py                # Streamlit UI (validate tab + query history tab)

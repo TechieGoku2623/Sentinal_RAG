@@ -129,3 +129,32 @@ class UsageCounter(Base):
     tenant_id: Mapped[str] = mapped_column(String(64), index=True)
     month: Mapped[str] = mapped_column(String(7), index=True)
     query_count: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class QueryCacheEntry(Base):
+    """Cached agent results for repeat clinic queries."""
+
+    __tablename__ = "query_cache_entries"
+
+    cache_key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    payload_json: Mapped[str] = mapped_column(Text)
+    expires_at: Mapped[datetime] = mapped_column(DateTime, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
+
+
+class BatchQueryJob(Base):
+    """Async batch validation job for clinic-wide throughput."""
+
+    __tablename__ = "batch_query_jobs"
+
+    job_id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    status: Mapped[str] = mapped_column(String(16), default="queued", index=True)
+    latency_mode: Mapped[str] = mapped_column(String(16), default="fast")
+    total: Mapped[int] = mapped_column(Integer, default=0)
+    completed: Mapped[int] = mapped_column(Integer, default=0)
+    results_json: Mapped[str] = mapped_column(Text, default="[]")
+    error: Mapped[str] = mapped_column(Text, default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)

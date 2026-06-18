@@ -270,29 +270,32 @@ def _score_no_contradiction(response: str, doc_terms: List[str]) -> float:
 # Public API: the blended confidence score
 # ---------------------------------------------------------------------------
 def score_confidence(response: str, retrieved_docs: List[str], query: str) -> float:
-    """Compute a grounding-confidence score in [0.0, 1.0] for an answer.
+    """Compute a grounding-confidence score in [0.0, 1.0] for an answer."""
+    return score_confidence_breakdown(response, retrieved_docs, query)["total"]
 
-    Args:
-        response: The LLM-drafted answer to evaluate.
-        retrieved_docs: The guideline chunks that were provided as context.
-        query: The original user question (reserved for future query-aware
-            scoring; kept in the signature so callers/agent wiring are stable).
 
-    Returns:
-        A float in [0.0, 1.0]. Higher = better grounded / safer to surface as
-        an authoritative clinical answer. The LangGraph agent compares this
-        against thresholds to decide return / re-retrieve / escalate.
-
-    The score is a transparent weighted sum of four deterministic factors so
-    that any score can be explained after the fact — essential for a clinical
-    safety layer that may need to be audited.
-    """
-    # Guard: an empty answer cannot be trusted.
+def score_confidence_breakdown(
+    response: str,
+    retrieved_docs: List[str],
+    query: str,
+) -> dict:
+    """Return factor scores and weighted total for UI / audit explainability."""
+    _ = query  # reserved for future query-aware scoring
     if not response or not response.strip():
-        return 0.0
+        return {
+            "coverage": 0.0,
+            "no_uncertainty": 0.0,
+            "specificity": 0.0,
+            "no_contradiction": 0.0,
+            "weights": {
+                "coverage": WEIGHT_COVERAGE,
+                "no_uncertainty": WEIGHT_NO_UNCERTAINTY,
+                "specificity": WEIGHT_SPECIFICITY,
+                "no_contradiction": WEIGHT_NO_CONTRADICTION,
+            },
+            "total": 0.0,
+        }
 
-    # Build the source vocabulary once from ALL retrieved chunks combined, so
-    # coverage/contradiction are measured against the full retrieved context.
     combined_docs = " ".join(retrieved_docs) if retrieved_docs else ""
     doc_terms = extract_key_terms(combined_docs)
 
@@ -301,22 +304,27 @@ def score_confidence(response: str, retrieved_docs: List[str], query: str) -> fl
     specificity = _score_specificity(response)
     no_contradiction = _score_no_contradiction(response, doc_terms)
 
-    confidence = (
+    total = (
         WEIGHT_COVERAGE * coverage
         + WEIGHT_NO_UNCERTAINTY * no_uncertainty
         + WEIGHT_SPECIFICITY * specificity
         + WEIGHT_NO_CONTRADICTION * no_contradiction
     )
+    total = round(max(0.0, min(total, 1.0)), 4)
 
-    logger.debug(
-        "Confidence factors: coverage=%.3f no_uncertainty=%.3f "
-        "specificity=%.3f no_contradiction=%.3f -> %.4f",
-        coverage, no_uncertainty, specificity, no_contradiction, confidence,
-    )
-
-    # Clamp defensively against floating-point drift; the weights sum to 1.0 so
-    # the natural range is already [0, 1].
-    return round(max(0.0, min(confidence, 1.0)), 4)
+    return {
+        "coverage": round(coverage, 4),
+        "no_uncertainty": round(no_uncertainty, 4),
+        "specificity": round(specificity, 4),
+        "no_contradiction": round(no_contradiction, 4),
+        "weights": {
+            "coverage": WEIGHT_COVERAGE,
+            "no_uncertainty": WEIGHT_NO_UNCERTAINTY,
+            "specificity": WEIGHT_SPECIFICITY,
+            "no_contradiction": WEIGHT_NO_CONTRADICTION,
+        },
+        "total": total,
+    }
 
 
 def has_corpus_anchor(query: str, retrieved_docs: List[str]) -> bool:

@@ -20,12 +20,20 @@ import src.recency_scorer as recency
 import src.retriever as retriever_module
 import src.validator as validator_module
 from src.data_sources import pubmed as pubmed_module
+from src.services.retrieval_cache import clear_retrieval_cache
 
 
 @pytest.fixture(autouse=True)
 def _no_disk_feedback(mocker):
     """Stop run_agent tests from writing the real feedback CSV to disk."""
     mocker.patch.object(agent_module, "log_interaction", return_value="ts-test")
+
+
+@pytest.fixture(autouse=True)
+def _isolated_retrieval_cache():
+    clear_retrieval_cache()
+    yield
+    clear_retrieval_cache()
 from src.chains import INSUFFICIENT_CONTEXT, generate_response
 from src.ingest import load_pdf_file, load_txt_file
 from src.validator import cross_validate

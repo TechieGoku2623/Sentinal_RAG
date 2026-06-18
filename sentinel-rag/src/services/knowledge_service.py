@@ -18,6 +18,8 @@ from src.ingest import (
 )
 from src.retriever import delete_document, get_collection_count, ingest_guidelines, list_documents
 from src.services.audit_service import log_audit_event
+from src.services.query_cache import invalidate_tenant
+from src.services.retrieval_cache import clear_retrieval_cache
 from src.services.workspace_service import check_document_quota
 
 logger = logging.getLogger(__name__)
@@ -112,6 +114,8 @@ def ingest_uploaded_file(
         actor=actor,
         tenant_id=tenant,
     )
+    invalidate_tenant(tenant)
+    clear_retrieval_cache()
     return meta
 
 
@@ -143,6 +147,9 @@ def ingest_pubmed(
         actor=actor,
         tenant_id=tenant_id,
     )
+    tenant = tenant_id or config.DEFAULT_TENANT_ID
+    invalidate_tenant(tenant)
+    clear_retrieval_cache()
     return result
 
 
@@ -174,6 +181,9 @@ def ingest_openfda(
         actor=actor,
         tenant_id=tenant_id,
     )
+    tenant = tenant_id or config.DEFAULT_TENANT_ID
+    invalidate_tenant(tenant)
+    clear_retrieval_cache()
     return result
 
 
@@ -196,6 +206,8 @@ def remove_document(
         actor=actor,
         tenant_id=tenant_id,
     )
+    invalidate_tenant(tenant)
+    clear_retrieval_cache()
     return deleted
 
 

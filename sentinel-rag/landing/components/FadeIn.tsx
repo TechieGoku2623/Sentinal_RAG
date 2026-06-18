@@ -1,7 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { animate, stagger, type JSAnimation } from "animejs";
 import type { ReactNode } from "react";
+import { MOTION, prefersReducedMotion, revertAnim } from "@/lib/motion/anime";
 
 type FadeInProps = {
   children: ReactNode;
@@ -11,31 +13,78 @@ type FadeInProps = {
   duration?: number;
 };
 
+function directionOffset(direction: FadeInProps["direction"]) {
+  const offset = 28;
+  switch (direction) {
+    case "down":
+      return { y: -offset, x: 0 };
+    case "left":
+      return { y: 0, x: offset };
+    case "right":
+      return { y: 0, x: -offset };
+    case "none":
+      return { y: 0, x: 0 };
+    default:
+      return { y: offset, x: 0 };
+  }
+}
+
 export function FadeIn({
   children,
   className = "",
   delay = 0,
   direction = "up",
-  duration = 0.55,
+  duration = 550,
 }: FadeInProps) {
-  const reduce = useReducedMotion();
-  const offset = reduce ? 0 : 28;
-  const initial = {
-    opacity: 0,
-    y: direction === "up" ? offset : direction === "down" ? -offset : 0,
-    x: direction === "left" ? offset : direction === "right" ? -offset : 0,
-  };
+  const ref = useRef<HTMLDivElement>(null);
+  const animRef = useRef<JSAnimation | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+      return;
+    }
+
+    const { y, x } = directionOffset(direction);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+
+        const params: Record<string, unknown> = {
+          opacity: { from: 0, to: 1 },
+          duration,
+          delay: delay * 1000,
+          ease: MOTION.ease.out,
+        };
+        if (y) params.y = { from: y, to: 0 };
+        if (x) params.x = { from: x, to: 0 };
+
+        animRef.current = animate(el, params);
+      },
+      { threshold: 0.1, rootMargin: "-60px" },
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      revertAnim(animRef.current);
+    };
+  }, [delay, direction, duration]);
 
   return (
-    <motion.div
+    <div
+      ref={ref}
       className={className}
-      initial={reduce ? false : initial}
-      whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
+      style={{ opacity: prefersReducedMotion() ? 1 : 0 }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -46,20 +95,55 @@ export function StaggerContainer({
   children: ReactNode;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const animRef = useRef<JSAnimation | null>(null);
+
+  useEffect(() => {
+    const container = ref.current;
+    if (!container) return;
+
+    const items = container.querySelectorAll<HTMLElement>("[data-stagger-item]");
+    if (!items.length) return;
+
+    if (prefersReducedMotion()) {
+      items.forEach((item) => {
+        item.style.opacity = "1";
+        item.style.transform = "none";
+      });
+      return;
+    }
+
+    items.forEach((item) => {
+      item.style.opacity = "0";
+    });
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+
+        animRef.current = animate(items, {
+          opacity: { from: 0, to: 1 },
+          y: { from: 24, to: 0 },
+          delay: stagger(100, { start: 50 }),
+          duration: 500,
+          ease: MOTION.ease.out,
+        });
+      },
+      { threshold: 0.08, rootMargin: "-40px" },
+    );
+
+    observer.observe(container);
+    return () => {
+      observer.disconnect();
+      revertAnim(animRef.current);
+    };
+  }, []);
+
   return (
-    <motion.div
-      className={className}
-      initial={reduce ? false : "hidden"}
-      whileInView="show"
-      viewport={{ once: true, margin: "-40px" }}
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-      }}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -70,24 +154,9 @@ export function StaggerItem({
   children: ReactNode;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
   return (
-    <motion.div
-      className={className}
-      variants={
-        reduce
-          ? undefined
-          : {
-              hidden: { opacity: 0, y: 24 },
-              show: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-              },
-            }
-      }
-    >
+    <div data-stagger-item className={className} style={{ opacity: 0 }}>
       {children}
-    </motion.div>
+    </div>
   );
 }

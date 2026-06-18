@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import {
+  pipelineEntrance,
+  prefersReducedMotion,
+  revertAnim,
+  type AnimInstance,
+} from "@/lib/motion/anime";
 
 const STEPS = [
   { step: "01", name: "Retrieve", desc: "Parent-child semantic search over guidelines" },
@@ -11,36 +17,62 @@ const STEPS = [
 ];
 
 export function PipelineMotion() {
-  const reduce = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<AnimInstance | null>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    if (prefersReducedMotion()) {
+      root.querySelectorAll<HTMLElement>("[data-pipeline-step]").forEach((el) => {
+        el.style.opacity = "1";
+      });
+      const line = root.querySelector<HTMLElement>("[data-pipeline-line]");
+      if (line) line.style.transform = "scaleX(1)";
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        animRef.current = pipelineEntrance(root);
+      },
+      { threshold: 0.15, rootMargin: "-20px" },
+    );
+
+    observer.observe(root);
+    return () => {
+      observer.disconnect();
+      revertAnim(animRef.current);
+    };
+  }, []);
 
   return (
-    <div className="relative mt-12">
+    <div ref={rootRef} className="relative mt-12">
       <div className="pointer-events-none absolute left-[10%] right-[10%] top-7 hidden h-px overflow-hidden bg-slate-line md:block">
-        <motion.div
+        <div
+          data-pipeline-line
           className="h-full origin-left bg-brand"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          style={{ transform: "scaleX(0)" }}
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-5">
-        {STEPS.map((s, i) => (
-          <motion.div
+        {STEPS.map((s) => (
+          <div
             key={s.step}
-            className="pro-card p-5 text-center"
-            initial={reduce ? false : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-20px" }}
-            transition={{ duration: 0.45, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            data-pipeline-step
+            className="surface-card pipeline-card p-5 text-center"
+            style={{ opacity: 0 }}
           >
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">
               {s.step}
             </span>
             <h3 className="mt-3 font-semibold text-navy">{s.name}</h3>
             <p className="mt-1 text-xs leading-relaxed text-slate-muted">{s.desc}</p>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

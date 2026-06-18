@@ -20,7 +20,7 @@ export function LoomDemo() {
           <p className="mt-4 max-w-2xl text-slate-300">
             {hasLoom
               ? "2-minute walkthrough: protocol validation, confidence scoring, flagging, and clinical recollection — built for recruiters and hiring managers evaluating LangGraph + clinical AI work."
-              : "Embed your Loom recording here. Until then, use the animated preview below or follow the recording script in docs/LOOM_DEMO.md."}
+              : "Embed your Loom recording here. Until then, use the animated preview below."}
           </p>
         </FadeIn>
 
@@ -69,12 +69,6 @@ export function LoomDemo() {
                     </code>{" "}
                     in <code className="rounded bg-white/10 px-1.5 py-0.5 text-xs">landing/.env.local</code>
                   </p>
-                  <a
-                    href="../docs/LOOM_DEMO.md"
-                    className="mt-6 inline-block rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white"
-                  >
-                    Open recording script →
-                  </a>
                 </div>
               </div>
             </div>

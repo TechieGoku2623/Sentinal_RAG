@@ -1,6 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import { Check } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "./FadeIn";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { SITE } from "@/lib/site";
 
 const PLANS = [
@@ -57,18 +69,18 @@ const PLANS = [
     href: "mailto:sales@sentinel-rag.dev",
     highlighted: false,
   },
-];
+] as const;
 
 export function Pricing() {
   return (
-    <section id="pricing" className="bg-white px-6 py-20">
+    <section id="pricing" className="bg-[var(--color-paper)] px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <FadeIn>
           <p className="section-label">Pricing</p>
-          <h2 className="mt-2 text-3xl font-bold text-navy md:text-4xl">
+          <h2 className="font-display mt-2 text-3xl font-semibold text-[var(--color-ink)] md:text-4xl">
             SaaS plans that scale with your clinical team
           </h2>
-          <p className="mt-4 max-w-2xl text-slate-muted">
+          <p className="mt-4 max-w-2xl text-[var(--color-ink-2)]">
             Metered by validation queries. Every tier includes the five-layer safety pipeline,
             audit logging, and human-in-the-loop escalation.
           </p>
@@ -77,52 +89,74 @@ export function Pricing() {
         <StaggerContainer className="mt-12 grid gap-6 lg:grid-cols-3">
           {PLANS.map((plan) => (
             <StaggerItem key={plan.id}>
-              <div
-                className={`flex h-full flex-col rounded-xl border p-8 ${
+              <Card
+                className={
                   plan.highlighted
-                    ? "border-brand bg-navy text-white shadow-glow"
-                    : "border-slate-line bg-[#F4F6F9] text-navy"
-                }`}
+                    ? "relative h-full border-[var(--color-accent)] bg-[var(--color-graphite)] text-[var(--color-graphite-ink)] ring-2 ring-[var(--color-accent)]/30"
+                    : "h-full border-2 border-[var(--color-rule)] bg-white shadow-sm"
+                }
               >
-                <p
-                  className={`text-xs font-semibold uppercase tracking-widest ${
-                    plan.highlighted ? "text-brand-light" : "text-brand"
-                  }`}
-                >
-                  {plan.name}
-                </p>
-                <p className="mt-4 flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  {plan.period && (
-                    <span className={plan.highlighted ? "text-slate-300" : "text-slate-muted"}>
-                      {plan.period}
+                {plan.highlighted && (
+                  <Badge className="absolute -top-2.5 left-4 bg-[var(--color-accent)] text-[var(--color-accent-ink)]">
+                    Most popular
+                  </Badge>
+                )}
+                <CardHeader className="pt-8">
+                  <CardTitle
+                    className={
+                      plan.highlighted
+                        ? "font-mono text-xs uppercase tracking-widest text-[var(--color-accent)]"
+                        : "font-mono text-xs uppercase tracking-widest text-[var(--color-accent)]"
+                    }
+                  >
+                    {plan.name}
+                  </CardTitle>
+                  <div className="mt-2 flex items-baseline gap-1">
+                    <span className="font-display text-4xl font-semibold tabular-nums">
+                      {plan.price}
                     </span>
-                  )}
-                </p>
-                <p
-                  className={`mt-3 text-sm ${plan.highlighted ? "text-slate-300" : "text-slate-muted"}`}
-                >
-                  {plan.description}
-                </p>
-                <ul className="mt-6 flex-1 space-y-2.5 text-sm">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className={plan.highlighted ? "text-brand-light" : "text-brand"}>✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href={plan.href}
-                  className={`mt-8 block rounded-lg py-2.5 text-center text-sm font-semibold transition-colors ${
-                    plan.highlighted
-                      ? "bg-brand text-white hover:bg-brand-light"
-                      : "bg-navy text-white hover:bg-navy-mid"
-                  }`}
-                >
-                  {plan.cta}
-                </a>
-              </div>
+                    {plan.period && (
+                      <span
+                        className={
+                          plan.highlighted ? "text-[var(--color-graphite-ink)]/70" : "text-[var(--color-ink-2)]"
+                        }
+                      >
+                        {plan.period}
+                      </span>
+                    )}
+                  </div>
+                  <CardDescription
+                    className={
+                      plan.highlighted ? "text-[var(--color-graphite-ink)]/80" : "text-[var(--color-ink-2)]"
+                    }
+                  >
+                    {plan.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2.5 text-sm">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <Check
+                          className="mt-0.5 size-4 shrink-0 text-[var(--color-accent)]"
+                          aria-hidden
+                        />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    render={<Link href={plan.href} />}
+                    variant={plan.highlighted ? "default" : "outline"}
+                    size="lg"
+                    className="w-full cursor-pointer border-2 border-[var(--color-rule)]"
+                  >
+                    {plan.cta}
+                  </Button>
+                </CardFooter>
+              </Card>
             </StaggerItem>
           ))}
         </StaggerContainer>
