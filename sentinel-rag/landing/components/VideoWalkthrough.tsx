@@ -29,7 +29,7 @@ export function VideoWalkthrough() {
           <p className="mt-4 max-w-2xl text-[var(--text-secondary)]">
             {hasVideo
               ? "Protocol validation, confidence scoring, self-correction, and human escalation — a full product tour for GitHub and LinkedIn."
-              : "Automated product demo below. Record a narrated walkthrough with docs/VIDEO_WALKTHROUGH.md and embed Loom to replace it."}
+              : "Full 7-clip walkthrough (~58s) generated with MoviePy + Pillow. Replace with your Loom recording via .env.local when ready."}
           </p>
         </FadeIn>
 
@@ -61,8 +61,8 @@ export function VideoWalkthrough() {
                 playsInline
                 poster="/logo.png"
               >
+                <source src="/walkthrough.mp4" type="video/mp4" />
                 <source src="/demo.mp4" type="video/mp4" />
-                <source src="/demo.gif" type="image/gif" />
                 Your browser does not support embedded video.
               </video>
               <p className="absolute bottom-3 right-3 rounded-md bg-[rgba(6,13,20,0.85)] px-2.5 py-1 font-mono text-[10px] text-[var(--text-muted)]">

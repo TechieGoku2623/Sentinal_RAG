@@ -1,0 +1,4 @@
+# MoviePy + Pillow walkthrough (scripts/generate_walkthrough_video.py)
+moviepy>=2.0.0
+numpy>=1.26.0
+Pillow>=10.4.0
