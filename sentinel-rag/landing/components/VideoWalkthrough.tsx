@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { SITE } from "@/lib/site";
@@ -30,7 +29,7 @@ export function VideoWalkthrough() {
           <p className="mt-4 max-w-2xl text-[var(--text-secondary)]">
             {hasVideo
               ? "Protocol validation, confidence scoring, self-correction, and human escalation — a full product tour for GitHub and LinkedIn."
-              : "Record a 3-minute walkthrough with the script in docs/VIDEO_WALKTHROUGH.md, then embed your Loom or YouTube link below."}
+              : "Automated product demo below. Record a narrated walkthrough with docs/VIDEO_WALKTHROUGH.md and embed Loom to replace it."}
           </p>
         </FadeIn>
 
@@ -52,40 +51,23 @@ export function VideoWalkthrough() {
               />
             </div>
           ) : (
-            <div className="relative">
-              <Image
-                src="/demo.gif"
-                alt="Sentinel-RAG animated demo preview"
-                width={1200}
-                height={680}
-                unoptimized
-                className="h-auto w-full opacity-80"
-              />
-              <div className="absolute inset-0 flex items-center justify-center bg-[rgba(6,13,20,0.72)] backdrop-blur-[2px]">
-                <div className="mx-4 max-w-lg rounded-xl border border-[rgba(14,199,136,0.25)] bg-[var(--bg-elevated)] p-8 text-center">
-                  <p className="text-lg font-semibold text-[var(--text-primary)]">Record your walkthrough</p>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-                    Follow{" "}
-                    <code className="rounded bg-[var(--bg-base)] px-1.5 py-0.5 text-xs text-[var(--teal)]">
-                      docs/VIDEO_WALKTHROUGH.md
-                    </code>
-                    , upload to Loom or YouTube, then set{" "}
-                    <code className="rounded bg-[var(--bg-base)] px-1.5 py-0.5 text-xs text-[var(--teal)]">
-                      NEXT_PUBLIC_LOOM_EMBED_URL
-                    </code>{" "}
-                    in{" "}
-                    <code className="rounded bg-[var(--bg-base)] px-1.5 py-0.5 text-xs text-[var(--teal)]">
-                      landing/.env.local
-                    </code>
-                  </p>
-                  <Link
-                    href="/workspace"
-                    className="mt-5 inline-block rounded-lg bg-[var(--teal)] px-5 py-2.5 text-sm font-semibold text-[var(--bg-base)] no-underline"
-                  >
-                    Try live workspace instead →
-                  </Link>
-                </div>
-              </div>
+            <div className="relative aspect-video w-full bg-black">
+              <video
+                className="h-full w-full object-contain"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster="/logo.png"
+              >
+                <source src="/demo.mp4" type="video/mp4" />
+                <source src="/demo.gif" type="image/gif" />
+                Your browser does not support embedded video.
+              </video>
+              <p className="absolute bottom-3 right-3 rounded-md bg-[rgba(6,13,20,0.85)] px-2.5 py-1 font-mono text-[10px] text-[var(--text-muted)]">
+                Auto-generated demo · replace with Loom via .env.local
+              </p>
             </div>
           )}
         </motion.div>

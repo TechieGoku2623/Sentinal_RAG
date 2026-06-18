@@ -190,4 +190,13 @@ python scripts/generate_demo_gif.py
 # Output: docs/demo.gif — copied to landing/public/demo.gif
 ```
 
-Use this as a README preview until the Loom recording is ready.
+## Auto-generated product video (no mic / no screen recorder)
+
+Creates a ~12-second MP4 walkthrough (high-confidence → retry → flag) for GitHub and the landing page:
+
+```powershell
+pip install imageio imageio-ffmpeg
+python scripts/generate_demo_video.py
+```
+
+Outputs: `docs/demo.mp4` and `landing/public/demo.mp4` (shown on homepage **#walkthrough** until you embed Loom).
