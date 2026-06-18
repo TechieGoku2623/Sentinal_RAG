@@ -59,15 +59,30 @@ export function VideoWalkthrough() {
                 muted
                 loop
                 playsInline
+                preload="metadata"
                 poster="/logo.png"
               >
-                <source src="/walkthrough.mp4" type="video/mp4" />
-                <source src="/demo.mp4" type="video/mp4" />
-                Your browser does not support embedded video.
+                <source src="/walkthrough.webm" type="video/webm" />
+                <source src="/walkthrough.mp4" type="video/mp4; codecs=avc1.42E01E" />
+                <source src="/demo.mp4" type="video/mp4; codecs=avc1.42E01E" />
+                Your browser does not support HTML5 video (MP4 or WebM).
               </video>
-              <p className="absolute bottom-3 right-3 rounded-md bg-[rgba(6,13,20,0.85)] px-2.5 py-1 font-mono text-[10px] text-[var(--text-muted)]">
-                Auto-generated demo · replace with Loom via .env.local
-              </p>
+              <div className="absolute bottom-3 right-3 flex flex-wrap justify-end gap-2">
+                <a
+                  href="/walkthrough.mp4"
+                  download
+                  className="rounded-md bg-[rgba(6,13,20,0.85)] px-2.5 py-1 font-mono text-[10px] text-[var(--teal)] no-underline hover:underline"
+                >
+                  MP4
+                </a>
+                <a
+                  href="/walkthrough.webm"
+                  download
+                  className="rounded-md bg-[rgba(6,13,20,0.85)] px-2.5 py-1 font-mono text-[10px] text-[var(--teal)] no-underline hover:underline"
+                >
+                  WebM
+                </a>
+              </div>
             </div>
           )}
         </motion.div>

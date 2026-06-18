@@ -202,7 +202,10 @@ python scripts/generate_walkthrough_video.py
 | Output | Purpose |
 | ------ | ------- |
 | `docs/walkthrough.mp4` | Full walkthrough for GitHub / LinkedIn |
+| `docs/walkthrough.webm` | Web embed fallback (VP9) |
 | `landing/public/walkthrough.mp4` | Homepage **#walkthrough** embed |
+
+Format guide: [VIDEO_FORMATS.md](VIDEO_FORMATS.md)
 
 README / technical cut (clips 03–06 only, ~32s):
 
