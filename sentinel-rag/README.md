@@ -37,7 +37,9 @@ Its core innovation is a *five-layer safety pipeline*: retrieve → generate →
 
 ---
 
-![Demo preview](docs/brand/logo.png)
+![Demo preview](docs/demo.gif)
+
+**Video walkthrough** (~12s auto-generated demo): [`docs/demo.mp4`](docs/demo.mp4) · regenerate with `python scripts/generate_demo_video.py`
 
 *Sentinel-RAG validating clinical protocols with confidence scoring, self-correction, and human escalation*
 
