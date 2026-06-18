@@ -10,6 +10,7 @@ const LINKS = [
   ["#platform", "Platform"],
   ["#metrics", "Metrics"],
   ["#demo", "Demo"],
+  ["#walkthrough", "Video"],
   ["#docs", "Docs"],
 ] as const;
 

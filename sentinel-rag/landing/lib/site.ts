@@ -13,6 +13,8 @@ export const SITE = {
     "https://github.com/TechieGoku2623/Sentinal_RAG/tree/main/sentinel-rag/docs",
   loomEmbedUrl: process.env.NEXT_PUBLIC_LOOM_EMBED_URL ?? "",
   loomShareUrl: process.env.NEXT_PUBLIC_LOOM_SHARE_URL ?? "",
+  youtubeEmbedId: process.env.NEXT_PUBLIC_YOUTUBE_EMBED_ID ?? "",
+  youtubeWatchUrl: process.env.NEXT_PUBLIC_YOUTUBE_WATCH_URL ?? "",
 };
 
 export function apiDocsUrl(): string {

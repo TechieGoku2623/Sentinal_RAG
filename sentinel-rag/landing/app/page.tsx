@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { EvalMetrics } from "@/components/EvalMetrics";
+import { VideoWalkthrough } from "@/components/VideoWalkthrough";
 import { Footer } from "@/components/Footer";
 import { FadeIn } from "@/components/FadeIn";
 import { SITE } from "@/lib/site";
@@ -23,6 +24,7 @@ export default function HomePage() {
       <FeatureGrid />
       <ArchitectureDiagram />
       <EvalMetrics />
+      <VideoWalkthrough />
 
       <section id="docs" className="graphite-band px-10 py-24">
         <div className="mx-auto max-w-6xl">
