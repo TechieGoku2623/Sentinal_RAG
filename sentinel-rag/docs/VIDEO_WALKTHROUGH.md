@@ -190,7 +190,31 @@ python scripts/generate_demo_gif.py
 # Output: docs/demo.gif — copied to landing/public/demo.gif
 ```
 
-## Auto-generated product video (no mic / no screen recorder)
+## Auto-generated product video (MoviePy + Pillow — no API key)
+
+Full **7-clip storyboard** (~58s) with title card — matches the Veo prompt arc:
+
+```powershell
+pip install -r requirements-video.txt
+python scripts/generate_walkthrough_video.py
+```
+
+| Output | Purpose |
+| ------ | ------- |
+| `docs/walkthrough.mp4` | Full walkthrough for GitHub / LinkedIn |
+| `landing/public/walkthrough.mp4` | Homepage **#walkthrough** embed |
+
+README / technical cut (clips 03–06 only, ~32s):
+
+```powershell
+python scripts/generate_walkthrough_video.py --product-only
+```
+
+Prompt reference for Veo / Flow / manual editing: [VEO_VIDEO_PROMPTS.md](VEO_VIDEO_PROMPTS.md)
+
+---
+
+## Auto-generated product video (Pillow + imageio — short demo)
 
 Creates a ~12-second MP4 walkthrough (high-confidence → retry → flag) for GitHub and the landing page:
 
@@ -200,3 +224,38 @@ python scripts/generate_demo_video.py
 ```
 
 Outputs: `docs/demo.mp4` and `landing/public/demo.mp4` (shown on homepage **#walkthrough** until you embed Loom).
+
+---
+
+## Cinematic AI video (Google Veo 3.1)
+
+Generate Hollywood-style B-roll clips with **Veo 3.1** (paid Gemini API):
+
+```powershell
+pip install -r requirements-veo.txt
+$env:GEMINI_API_KEY = "your_key"
+python scripts/generate_veo_walkthrough.py
+```
+
+| Clip | Scene |
+| ---- | ----- |
+| clip_01 | Tablet intro — Sentinel-RAG dark UI |
+| clip_02 | Doctor opens app in hospital |
+| clip_03 | Ultrawide command center monitor |
+| clip_04 | Query typing + agent pipeline |
+| clip_05 | High-confidence answer (98%) |
+| clip_06 | Flagged escalation (27%) |
+| clip_07 | Doctor closing hero shot |
+
+Options:
+
+```powershell
+# Draft one clip (cheaper fast model)
+python scripts/generate_veo_walkthrough.py --clip clip_01 --model veo-3.1-fast-generate-preview
+
+# Stitch all clips (requires ffmpeg)
+cd docs/veo_clips
+ffmpeg -f concat -safe 0 -i concat.txt -c copy ../veo_walkthrough.mp4
+```
+
+**Cost estimate:** ~$3.20 per 8s clip at 1080p on `veo-3.1-generate-preview` (~$22 for all 7).

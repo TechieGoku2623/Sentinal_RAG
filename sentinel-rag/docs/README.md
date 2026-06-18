@@ -93,6 +93,7 @@ Enterprise documentation for the Clinical Protocol Guardian platform.
 
 
 - **Video walkthrough (script + embed guide):** [VIDEO_WALKTHROUGH.md](VIDEO_WALKTHROUGH.md)
+- **Veo / storyboard prompts:** [VEO_VIDEO_PROMPTS.md](VEO_VIDEO_PROMPTS.md)
 
 - **Run the app:** `streamlit run app.py`
 
