@@ -92,7 +92,11 @@ Enterprise documentation for the Clinical Protocol Guardian platform.
 
 
 
+- **Video walkthrough (script + embed guide):** [VIDEO_WALKTHROUGH.md](VIDEO_WALKTHROUGH.md)
+
 - **Run the app:** `streamlit run app.py`
+
+- **Live demo (Next.js):** `cd landing && npm run dev` → `/workspace`
 
 - **Build knowledge base:** `python -m src.ingest`
 

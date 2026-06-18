@@ -63,6 +63,8 @@ cd landing && npm install && npm run dev
 
 Deploy the `landing/` app to Vercel; set `SENTINEL_API_URL` to your hosted FastAPI. See `landing/.env.example`.
 
+**Video walkthrough:** Record a 3-minute demo with the word-for-word script in [docs/VIDEO_WALKTHROUGH.md](docs/VIDEO_WALKTHROUGH.md), then embed on the homepage via `NEXT_PUBLIC_LOOM_EMBED_URL`.
+
 End-to-end platform guide: [docs/END_TO_END.md](docs/END_TO_END.md)
 
 Brand assets live in `docs/brand/` (`logo.png`, `favicon.ico`, `apple-touch-icon.png`). Regenerate with `python scripts/generate_brand_assets.py`.
