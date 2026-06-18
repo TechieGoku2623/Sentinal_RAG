@@ -36,6 +36,21 @@ See [VIDEO_WALKTHROUGH.md](VIDEO_WALKTHROUGH.md) for Loom recording and assembly
 | 06 | Demo C | 27% flagged for review |
 | 07 | Close | Doctor trusts the system |
 
+### Bonus clips (LinkedIn / extended cut)
+
+| Clip | Title | Scene |
+| ---- | ----- | ----- |
+| bonus_a | Architecture | Abstract pipeline with data packets + retry loop |
+| bonus_b | Privacy first | Server rack, teal padlock, on-prem boundary |
+| bonus_c | Guideline source | Document scan + teal highlight extraction |
+
+```powershell
+# All 10 clips as separate MP4s + full ~82s video
+python scripts/generate_walkthrough_video.py --export-clips --with-bonus
+```
+
+Outputs: `docs/walkthrough_clips/clip_01.mp4` ... `bonus_c.mp4` and `docs/walkthrough-full.mp4`
+
 **Title card (edit in post):** SENTINEL-RAG · Clinical Protocol Guardian · GitHub URL on `#060D14`
 
 **Final runtime:** ~75s with transitions + title card

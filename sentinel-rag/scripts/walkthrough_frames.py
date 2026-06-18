@@ -391,6 +391,127 @@ def render_clip_07(t: float) -> Image.Image:
     return img
 
 
+def render_bonus_a(t: float) -> Image.Image:
+    """Architecture - abstract pipeline with data packets and retry loop."""
+    img = _base()
+    draw = ImageDraw.Draw(img)
+    labels = ["USER QUERY", "RETRIEVE", "GENERATE", "REFLECT", "OUTPUT"]
+    spacing = 300
+    start_x = W // 2 - spacing * 2
+    cy = H // 2 - 20
+
+    for i, label in enumerate(labels):
+        x = start_x + i * spacing
+        lit = i <= int(min(4, t * 5))
+        col = TEAL if lit else (30, 45, 58)
+        draw.rounded_rectangle([x - 70, cy - 36, x + 70, cy + 36], radius=8, fill=col, outline=TEAL if lit else (50, 65, 80))
+        tw = draw.textlength(label, font=_font(13, mono=True))
+        draw.text((x - tw / 2, cy - 8), label, font=_font(13, mono=True), fill=TEXT if lit else MUTED)
+        if i < len(labels) - 1:
+            nx = x + spacing
+            draw.line([x + 72, cy, nx - 72, cy], fill=TEAL if lit else (40, 55, 70), width=3)
+            # Data packet dot moving along line
+            if lit:
+                px = _lerp(x + 72, nx - 72, (t * 2 + i * 0.2) % 1.0)
+                draw.ellipse([px - 6, cy - 6, px + 6, cy + 6], fill=TEAL)
+
+    # Retry loop at REFLECT (index 3)
+    if 0.45 < t < 0.75:
+        loop_t = _ease((t - 0.45) / 0.3)
+        rx = start_x + 3 * spacing
+        tx = start_x + 1 * spacing
+        mid_y = cy - 80
+        draw.arc([tx, mid_y - 60, rx, cy - 20], start=200, end=200 + int(160 * loop_t), fill=AMBER, width=4)
+
+    _caption(img, "Retrieve - Generate - Reflect - Output", _ease(max(0, (t - 0.2) / 0.3)))
+    return img
+
+
+def render_bonus_b(t: float) -> Image.Image:
+    """Privacy first - server rack with teal padlock boundary."""
+    img = _base()
+    draw = ImageDraw.Draw(img)
+    # Server rack
+    rx, ry, rw, rh = W // 2 - 200, 220, 400, 520
+    draw.rounded_rectangle([rx, ry, rx + rw, ry + rh], radius=12, fill=(8, 14, 22), outline=(40, 55, 70), width=2)
+    for row in range(8):
+        yy = ry + 30 + row * 58
+        draw.rounded_rectangle([rx + 24, yy, rx + rw - 24, yy + 40], radius=4, fill=(15, 25, 38))
+        for led in range(6):
+            lx = rx + 40 + led * 52
+            color = TEAL if (row + led) % 3 == 0 else (20, 80, 60)
+            if t > 0.3:
+                color = TEAL if led < int(min(6, (t - 0.3) * 10)) else color
+            draw.ellipse([lx, yy + 14, lx + 10, yy + 24], fill=color)
+
+    # Padlock glow
+    if t > 0.35:
+        pulse = 0.7 + 0.3 * math.sin(t * math.pi * 2) if t < 0.55 else 1.0
+        pcx, pcy = W // 2, H // 2 - 40
+        alpha = int(80 * pulse * min(1.0, (t - 0.35) / 0.2))
+        draw.ellipse([pcx - 80, pcy - 100, pcx + 80, pcy + 100], fill=(TEAL[0] // 4, TEAL[1] // 4, TEAL[2] // 4))
+        draw.rounded_rectangle([pcx - 28, pcy - 10, pcx + 28, pcy + 50], radius=6, outline=TEAL, width=4)
+        draw.arc([pcx - 22, pcy - 50, pcx + 22, pcy - 5], start=180, end=0, fill=TEAL, width=4)
+
+    # Network boundary grid
+    if t > 0.5:
+        grid_a = int(40 * min(1.0, (t - 0.5) / 0.3))
+        for i in range(-3, 4):
+            draw.line([W // 2 + i * 120, 120, W // 2 + i * 120, H - 120], fill=(TEAL[0] // 3, TEAL[1] // 3, TEAL[2] // 3), width=1)
+            draw.line([200, H // 2 + i * 80, W - 200, H // 2 + i * 80], fill=(TEAL[0] // 3, TEAL[1] // 3, TEAL[2] // 3), width=1)
+
+    _caption(img, "Privacy-first - data stays on-premises.", _ease(max(0, (t - 0.4) / 0.35)))
+    return img
+
+
+def render_bonus_c(t: float) -> Image.Image:
+    """Guideline source - document scan and teal highlight extraction."""
+    img = _base()
+    draw = ImageDraw.Draw(img)
+    zoom = _lerp(1.0, 1.12, _ease(min(1.0, t / 0.5)))
+    pw, ph = int(520 * zoom), int(680 * zoom)
+    px, py = (W - pw) // 2, (H - ph) // 2 + 20
+    draw.rounded_rectangle([px, py, px + pw, py + ph], radius=6, fill=(210, 215, 220))
+
+    # Fake guideline lines
+    for i in range(18):
+        yy = py + 40 + i * 32
+        width = int(pw * (0.5 + 0.4 * ((i * 7) % 5) / 5))
+        col = (160, 168, 175)
+        if t > 0.55 and 4 <= i <= 8:
+            col = (TEAL[0] // 2 + 80, TEAL[1] // 2 + 80, TEAL[2] // 2 + 80)
+        draw.line([px + 28, yy, px + 28 + width, yy], fill=col, width=3)
+
+    # Scan line sweep
+    if 0.25 < t < 0.55:
+        scan_y = py + int(ph * _ease((t - 0.25) / 0.3))
+        draw.line([px, scan_y, px + pw, scan_y], fill=TEAL, width=3)
+        draw.line([px, scan_y + 2, px + pw, scan_y + 2], fill=(TEAL[0] // 2, TEAL[1] // 2, TEAL[2] // 2), width=1)
+
+    draw.text((px + 28, py + 16), "Clinical Guideline GLY-2024", font=_font(18, bold=True), fill=(60, 70, 80))
+    _caption(img, "Grounded in your own protocol documents.", _ease(max(0, (t - 0.5) / 0.35)))
+    return img
+
+
+CLIP_RENDERERS = [
+    ("clip_01", render_clip_01, 8.0),
+    ("clip_02", render_clip_02, 8.0),
+    ("clip_03", render_clip_03, 8.0),
+    ("clip_04", render_clip_04, 8.0),
+    ("clip_05", render_clip_05, 8.0),
+    ("clip_06", render_clip_06, 8.0),
+    ("clip_07", render_clip_07, 8.0),
+]
+
+BONUS_CLIP_RENDERERS = [
+    ("bonus_a", render_bonus_a, 8.0),
+    ("bonus_b", render_bonus_b, 8.0),
+    ("bonus_c", render_bonus_c, 8.0),
+]
+
+ALL_CLIP_RENDERERS = CLIP_RENDERERS + BONUS_CLIP_RENDERERS
+
+
 def render_title_card(t: float) -> Image.Image:
     """4-second title card."""
     img = Image.new("RGB", (W, H), BG)
@@ -415,17 +536,6 @@ def render_title_card(t: float) -> Image.Image:
     draw.text((W // 2 - draw.textlength(t2, font=f2) / 2, H // 2 + 30), t2, font=f2, fill=col(MUTED))
     draw.text((W // 2 - draw.textlength(t3, font=f3) / 2, H // 2 + 80), t3, font=f3, fill=col(TEAL))
     return img
-
-
-CLIP_RENDERERS = [
-    ("clip_01", render_clip_01, 8.0),
-    ("clip_02", render_clip_02, 8.0),
-    ("clip_03", render_clip_03, 8.0),
-    ("clip_04", render_clip_04, 8.0),
-    ("clip_05", render_clip_05, 8.0),
-    ("clip_06", render_clip_06, 8.0),
-    ("clip_07", render_clip_07, 8.0),
-]
 
 
 def render_frames(fn, duration: float, fps: int = FPS) -> list:
