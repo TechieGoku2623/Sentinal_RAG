@@ -9,7 +9,7 @@ This guide includes a word-for-word script, pre-flight checklist, and embed inst
 
 ### 1. Start the stack
 
-Open **three terminals** from `sentinel-rag/`:
+Open **three terminals** from the repository root:
 
 ```powershell
 # Terminal 1 — ingest once (if chroma_db is empty)

@@ -8,7 +8,7 @@
 
 **Enterprise-grade self-reflective RAG for guideline-grounded clinical protocol validation**
 
-[![CI](https://github.com/devasai/sentinel-rag/actions/workflows/ci.yml/badge.svg)](https://github.com/devasai/sentinel-rag/actions/workflows/ci.yml)
+[![CI](https://github.com/TechieGoku2623/Sentinal_RAG/actions/workflows/ci.yml/badge.svg)](https://github.com/TechieGoku2623/Sentinal_RAG/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/LangGraph-0.1.19-1C3C3C?logo=langchain&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq-Llama%203.1%208B-F55036?logo=groq&logoColor=white)
@@ -16,7 +16,7 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.35-FF4B4B?logo=streamlit&logoColor=white)
 ![LangSmith](https://img.shields.io/badge/LangSmith-tracing-0F1117?logo=langchain&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Stars](https://img.shields.io/github/stars/devasai/sentinel-rag?style=social)
+![Stars](https://img.shields.io/github/stars/TechieGoku2623/Sentinal_RAG?style=social)
 
 </div>
 
@@ -267,8 +267,8 @@ correct action from the current guidelines.
 
 ```powershell
 # Step 1 — Clone
-git clone https://github.com/devasai/sentinel-rag.git
-cd sentinel-rag
+git clone https://github.com/TechieGoku2623/Sentinal_RAG.git
+cd Sentinal_RAG
 
 # Step 2 — Install dependencies
 python -m venv .venv; .\.venv\Scripts\Activate.ps1
@@ -293,7 +293,7 @@ Then open <http://localhost:8501>.
 ## 📁 Project Structure
 
 ```
-sentinel-rag/
+Sentinal_RAG/
 ├── src/
 │   ├── agent.py          # LangGraph state machine — the self-reflection loop
 │   ├── retriever.py      # All ChromaDB ops: parent/child collections, retrieval

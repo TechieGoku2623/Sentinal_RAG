@@ -10,7 +10,7 @@ export const SITE = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
   docsUrl:
     process.env.NEXT_PUBLIC_DOCS_URL ??
-    "https://github.com/TechieGoku2623/Sentinal_RAG/tree/main/sentinel-rag/docs",
+    "https://github.com/TechieGoku2623/Sentinal_RAG/tree/main/docs",
   loomEmbedUrl: process.env.NEXT_PUBLIC_LOOM_EMBED_URL ?? "",
   loomShareUrl: process.env.NEXT_PUBLIC_LOOM_SHARE_URL ?? "",
   youtubeEmbedId: process.env.NEXT_PUBLIC_YOUTUBE_EMBED_ID ?? "",
