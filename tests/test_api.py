@@ -9,7 +9,10 @@ from fastapi.testclient import TestClient
 @pytest.fixture()
 def client(mocker):
     mocker.patch("src.api.main.init_db")
-    mocker.patch("src.retriever.get_collection_count", return_value={"parent": 2, "child": 8})
+    mocker.patch(
+        "src.api.main.get_collection_count",
+        return_value={"parent": 2, "child": 8},
+    )
     from src.api.main import app
 
     return TestClient(app)
