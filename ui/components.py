@@ -278,6 +278,14 @@ def answer_card(
       "></div>
         """
 
+    cached_badge = (
+        "<span style=\"font-family:'JetBrains Mono',monospace;font-size:10px;"
+        "padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.06);"
+        "color:#7A9AB8;border:1px solid rgba(255,255,255,0.08);\">cached</span>"
+        if cache_hit
+        else ""
+    )
+
     card_html += f"""
       <div style="
         display:flex;align-items:center;justify-content:space-between;
@@ -294,7 +302,7 @@ def answer_card(
             background:rgba(14,199,136,0.12);color:#0EC788;
             border:1px solid rgba(14,199,136,0.25);
           ">{_esc(verdict_label)}</span>
-          {"<span style=\"font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.06);color:#7A9AB8;border:1px solid rgba(255,255,255,0.08);\">cached</span>" if cache_hit else ""}
+          {cached_badge}
         </div>
       </div>
       <div style="
