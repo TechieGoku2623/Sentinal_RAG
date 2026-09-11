@@ -13,8 +13,8 @@ and honesty about limitations. Please read this guide before opening a PR.
 
 ```powershell
 # 1. Fork & clone
-git clone https://github.com/<your-username>/sentinel-rag.git
-cd sentinel-rag
+git clone https://github.com/<your-username>/Sentinal_RAG.git
+cd Sentinal_RAG
 
 # 2. Virtual environment + dependencies
 python -m venv .venv; .\.venv\Scripts\Activate.ps1

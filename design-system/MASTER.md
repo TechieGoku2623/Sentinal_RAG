@@ -1,6 +1,6 @@
 # Sentinel-RAG Design System — Master
 
-> **Authority order:** `sentinel-rag/design.md` (Hallmark Veridian) wins for brand tokens and typography.
+> **Authority order:** `design.md` (Hallmark Veridian) wins for brand tokens and typography.
 > This file adds UI UX Pro Max rules for components, accessibility, and page structure.
 > For a specific page, check `design-system/pages/[page].md` first — page rules override this file.
 
