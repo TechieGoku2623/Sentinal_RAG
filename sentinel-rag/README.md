@@ -37,15 +37,35 @@ Its core innovation is a *five-layer safety pipeline*: retrieve → generate →
 
 ---
 
-![Demo preview](docs/demo.gif)
+## Watch the demo
 
-**Video walkthrough:** [`docs/demo.mp4`](docs/demo.mp4) (live UI recording of the portfolio + workspace). Generated storyboard clips remain available via `python scripts/generate_walkthrough_video.py`.
+<p align="center">
+  <a href="docs/demo.mp4">
+    <img src="docs/demo-poster.jpg" alt="Sentinel-RAG landing and workspace walkthrough" width="920"/>
+  </a>
+</p>
 
-[![Sentinel-RAG demo](docs/demo-poster.jpg)](docs/demo.mp4)
+<p align="center">
+  <a href="docs/demo.mp4"><strong>▶ Play walkthrough (docs/demo.mp4)</strong></a>
+  ·
+  <a href="docs/demo.gif">GIF preview</a>
+</p>
 
-<video src="docs/demo.mp4" controls width="100%"></video>
+<video src="docs/demo.mp4" controls width="100%" poster="docs/demo-poster.jpg"></video>
 
-*Sentinel-RAG validating clinical protocols with confidence scoring, self-correction, and human escalation*
+The recording is the **Next.js portfolio** (`landing/`) and the **live workspace** (`/workspace`). It is the same UI a recruiter or clinician would open first.
+
+| Time in clip | What you are seeing | Why it matters |
+| --- | --- | --- |
+| Hero | “Clinical AI that knows when to say I don’t know” | The product is a safety layer, not a fluent chatbot |
+| Feature grid | Retrieve · Reflect · Escalate · Govern | Four promises you can point to in `src/` |
+| Architecture | Retrieve → Generate → Reflect → Validate → Govern, plus FLAG | Uncertain answers are escalated, never dressed up |
+| Eval metrics | 50 questions · match · confidence · flag rate | From `scripts/run_eval.py`, not a hand-picked screenshot |
+| Workspace | Protocol validation chrome and pipeline tabs | Same five-layer idea, interactive |
+
+Storyboard clips (MoviePy) can still be generated with `python scripts/generate_walkthrough_video.py`. Word-for-word narration: [docs/VIDEO_WALKTHROUGH.md](docs/VIDEO_WALKTHROUGH.md).
+
+*Research prototype — not a medical device. Do not use for clinical decisions.*
 
 ---
 
