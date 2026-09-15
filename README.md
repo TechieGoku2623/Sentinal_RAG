@@ -18,17 +18,19 @@ This GitHub repository keeps the product in [`sentinel-rag/`](sentinel-rag/) so 
 
 ## Watch the demo
 
+The GIF **plays on this page**. Cursor’s recorder logo and end-of-video cube bumper have been removed.
+
 <p align="center">
-  <a href="sentinel-rag/docs/demo.mp4">
-    <img src="sentinel-rag/docs/demo-poster.jpg" alt="Sentinel-RAG landing and workspace walkthrough" width="920"/>
-  </a>
+  <img src="sentinel-rag/docs/demo.gif" alt="Sentinel-RAG walkthrough — plays inline" width="920"/>
 </p>
 
 <p align="center">
-  <a href="sentinel-rag/docs/demo.mp4"><strong>▶ Play walkthrough (sentinel-rag/docs/demo.mp4)</strong></a>
+  <a href="https://github.com/TechieGoku2623/Sentinal_RAG/blob/main/sentinel-rag/docs/demo.mp4"><strong>▶ Open HD player on GitHub</strong></a>
+  ·
+  <a href="sentinel-rag/docs/watch.html">local HTML player</a>
+  ·
+  <a href="sentinel-rag/docs/demo.webp">WebP</a>
 </p>
-
-<video src="sentinel-rag/docs/demo.mp4" controls width="100%" poster="sentinel-rag/docs/demo-poster.jpg"></video>
 
 | Time in clip | What you are seeing | Why it matters |
 | --- | --- | --- |

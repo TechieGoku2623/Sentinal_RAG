@@ -39,19 +39,19 @@ Its core innovation is a *five-layer safety pipeline*: retrieve → generate →
 
 ## Watch the demo
 
+The GIF **plays on this page**. Cursor’s recorder logo and end-of-video cube bumper have been removed.
+
 <p align="center">
-  <a href="docs/demo.mp4">
-    <img src="docs/demo-poster.jpg" alt="Sentinel-RAG landing and workspace walkthrough" width="920"/>
-  </a>
+  <img src="docs/demo.gif" alt="Sentinel-RAG landing and workspace walkthrough — plays inline" width="920"/>
 </p>
 
 <p align="center">
-  <a href="docs/demo.mp4"><strong>▶ Play walkthrough (docs/demo.mp4)</strong></a>
+  <a href="https://github.com/TechieGoku2623/Sentinal_RAG/blob/main/sentinel-rag/docs/demo.mp4"><strong>▶ Open HD player on GitHub</strong></a>
   ·
-  <a href="docs/demo.gif">GIF preview</a>
+  <a href="docs/watch.html">local HTML player</a>
+  ·
+  <a href="docs/demo.webp">WebP</a>
 </p>
-
-<video src="docs/demo.mp4" controls width="100%" poster="docs/demo-poster.jpg"></video>
 
 The recording is the **Next.js portfolio** (`landing/`) and the **live workspace** (`/workspace`). It is the same UI a recruiter or clinician would open first.
 
