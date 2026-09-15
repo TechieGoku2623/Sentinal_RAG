@@ -6,96 +6,83 @@
 
 ### Clinical Protocol Guardian
 
-**Enterprise-grade self-reflective RAG for guideline-grounded clinical protocol validation**
+Guideline-grounded protocol answers that **refuse to be confidently wrong**.
 
-[![CI](https://github.com/devasai/sentinel-rag/actions/workflows/ci.yml/badge.svg)](https://github.com/devasai/sentinel-rag/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
-![LangGraph](https://img.shields.io/badge/LangGraph-0.1.19-1C3C3C?logo=langchain&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-Llama%203.1%208B-F55036?logo=groq&logoColor=white)
-![ChromaDB](https://img.shields.io/badge/ChromaDB-0.5.3-FF6B6B)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.35-FF4B4B?logo=streamlit&logoColor=white)
-![LangSmith](https://img.shields.io/badge/LangSmith-tracing-0F1117?logo=langchain&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-agent-1C3C3C)
+![Groq](https://img.shields.io/badge/Groq-Llama%203.1%208B-F55036)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-local-FF6B6B)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Stars](https://img.shields.io/github/stars/devasai/sentinel-rag?style=social)
 
 </div>
 
 ---
 
-**Sentinel-RAG answers clinical protocol questions strictly from your own guideline documents — and refuses to be confidently wrong.**
+## The problem
 
-Its core innovation is a *five-layer safety pipeline*: retrieve → generate → **deterministic self-reflection** → independent cross-validation → human escalation when grounding is insufficient.
+A fluent wrong answer about a dose, contraindication, or first-line step is a **patient-safety event**, not a UX issue.
 
-| Pillar | What it means |
-| ------ | ------------- |
-| **Grounded answers** | Strict context-only generation with source citations |
-| **Self-audit loop** | Deterministic confidence scoring before every response |
-| **Human escalation** | Low-confidence outputs flagged for clinical review |
-| **Privacy-first** | Local vector store · on-prem-capable · auditable scoring |
+Standard RAG retrieves chunks, prompts a model, and returns the **first** draft. Tone is not grounding. There is no inspectable reason the system was “sure,” and no path to escalate when the guideline does not support the claim.
 
-📚 **[Full documentation →](docs/README.md)** · [PRD](docs/PRD.md) · [TRD](docs/TRD.md) · [App Flow](docs/APP_FLOW.md) · [Architecture](docs/ARCHITECTURE.md) · [Clinical Safety](docs/CLINICAL_SAFETY.md)
+## What this software does
+
+Sentinel-RAG answers **only from your ingested guidelines**, then **scores the draft before anyone sees it**.
+
+| Pillar | What it means in this repo |
+| --- | --- |
+| Grounded answers | Context-only generation with citations (`src/chains.py`) |
+| Self-audit | Deterministic confidence in `src/reflection.py` — not a second LLM |
+| Escalation | Low score or exhausted retries → **FLAG** for a clinician |
+| Privacy-first | Local ChromaDB; clinical text need not leave the machine |
+
+```text
+Retrieve  →  Generate  →  Reflect  →  high: return
+                                  →  medium: widen retrieval and retry
+                                  →  low: FLAG
+```
+
+*Research prototype — not a medical device. Do not use for clinical decisions.* The bundled corpus is a **fictional diabetes** guideline.
+
+📚 [Documentation hub](docs/README.md) · [PRD](docs/PRD.md) · [Architecture](docs/ARCHITECTURE.md) · [Clinical safety](docs/CLINICAL_SAFETY.md)
 
 ---
 
 ## Watch the demo
 
-This walkthrough **plays on this page** — it does not download a file.
+The walkthrough **plays on this page**.
 
 <p align="center">
   <img src="docs/demo.gif" alt="Sentinel-RAG landing and workspace walkthrough — plays inline" width="920"/>
 </p>
 
-The recording is the **Next.js portfolio** (`landing/`) and the **live workspace** (`/workspace`). It is the same UI a recruiter or clinician would open first.
-
-| Time in clip | What you are seeing | Why it matters |
-| --- | --- | --- |
-| Hero | “Clinical AI that knows when to say I don’t know” | The product is a safety layer, not a fluent chatbot |
-| Feature grid | Retrieve · Reflect · Escalate · Govern | Four promises you can point to in `src/` |
-| Architecture | Retrieve → Generate → Reflect → Validate → Govern, plus FLAG | Uncertain answers are escalated, never dressed up |
-| Eval metrics | 50 questions · match · confidence · flag rate | From `scripts/run_eval.py`, not a hand-picked screenshot |
-| Workspace | Protocol validation chrome and pipeline tabs | Same five-layer idea, interactive |
-
-Storyboard clips (MoviePy) can still be generated with `python scripts/generate_walkthrough_video.py`. Word-for-word narration: [docs/VIDEO_WALKTHROUGH.md](docs/VIDEO_WALKTHROUGH.md).
-
-*Research prototype — not a medical device. Do not use for clinical decisions.*
+| In the clip | Why it matters |
+| --- | --- |
+| Hero | Safety layer, not a fluent chatbot |
+| Pipeline | Uncertain answers are escalated, never dressed up |
+| Eval | Numbers from `scripts/run_eval.py` |
+| Workspace | Same loop, interactive at `/workspace` |
 
 ---
 
-## 🌐 Landing page & demo
+## Surfaces
 
-| Surface | Best for | Command | URL |
-| ------- | -------- | ------- | --- |
-| **Portfolio site** | GitHub README, recruiters | `cd landing && npm run dev` | [http://localhost:3000](http://localhost:3000) |
-| **Live workspace (Next.js)** | **Public demo — recommended** | API + `npm run dev` (see below) | [http://localhost:3000/workspace](http://localhost:3000/workspace) |
-| **REST API (FastAPI)** | Integrators, Swagger, batch jobs | `uvicorn src.api.main:app --reload --port 8000` | [http://localhost:8000/docs](http://localhost:8000/docs) |
-| **Clinical workspace (Streamlit)** | Internal prototyping, admin flows | `streamlit run app.py` | [http://localhost:8501](http://localhost:8501) |
-| **Full stack (Docker)** | One-command local stack | `docker compose up --build` | UI `:8501` · API `:8000` |
-
-**Recommended GitHub showcase** (professional, not Streamlit-only):
+| Surface | Command | URL |
+| --- | --- | --- |
+| Portfolio | `cd landing && npm run dev` | http://localhost:3000 |
+| Live workspace | API + landing | http://localhost:3000/workspace |
+| REST API | `uvicorn src.api.main:app --reload --port 8000` | http://localhost:8000/docs |
+| Streamlit | `streamlit run app.py` | http://localhost:8501 |
+| Docker | `docker compose up --build` | UI `:8501` · API `:8000` |
 
 ```bash
 uvicorn src.api.main:app --reload --port 8000
 cd landing && npm install && npm run dev
-# Live demo → http://localhost:3000/workspace
 ```
 
-Deploy the `landing/` app to Vercel; set `SENTINEL_API_URL` to your hosted FastAPI. See `landing/.env.example`.
-
-**Video walkthrough:** Record a 3-minute demo with the word-for-word script in [docs/VIDEO_WALKTHROUGH.md](docs/VIDEO_WALKTHROUGH.md), then embed on the homepage via `NEXT_PUBLIC_LOOM_EMBED_URL`.
-
-End-to-end platform guide: [docs/END_TO_END.md](docs/END_TO_END.md)
-
-Brand assets live in `docs/brand/` (`logo.png`, `favicon.ico`, `apple-touch-icon.png`). Regenerate with `python scripts/generate_brand_assets.py`.
+Set `GROQ_API_KEY` in `.env` (see `.env.example`) for live answers. Platform guide: [docs/END_TO_END.md](docs/END_TO_END.md).
 
 ---
 
-## 🩺 The Problem
-
-- **Healthcare AI cannot afford a confident hallucination.** A fluent but ungrounded answer about a dose, contraindication, or protocol step isn't a bad UX — it's a patient-safety event.
-- **Standard RAG fails silently.** Conventional retrieve-then-answer pipelines return whatever the model produces on the *first* pass, with no check that the answer is actually supported by the retrieved guidelines. The model's confidence is unrelated to whether it's right.
-- **Sentinel-RAG is different: it self-audits.** Every answer is scored for grounding before it's shown. The system can still be unsure — but when it is, it *says so and escalates*, instead of presenting an unverified answer as authoritative.
-
----
 
 ## 🧠 Architecture
 
