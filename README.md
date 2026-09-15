@@ -8,7 +8,7 @@ This GitHub repository keeps the product in [`sentinel-rag/`](sentinel-rag/) so 
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](sentinel-rag/README.md)
 [![Next.js](https://img.shields.io/badge/Landing-Next.js-000000?logo=nextdotjs)](sentinel-rag/landing)
-[![Demo](https://img.shields.io/badge/Demo-sentinel--rag%2Fdocs%2Fdemo.mp4-14B8A6)](sentinel-rag/docs/demo.mp4)
+[![Demo](https://img.shields.io/badge/Demo-plays%20on%20this%20page-14B8A6)](#watch-the-demo)
 
 **Full product README → [sentinel-rag/README.md](sentinel-rag/README.md)**
 
@@ -18,18 +18,16 @@ This GitHub repository keeps the product in [`sentinel-rag/`](sentinel-rag/) so 
 
 ## Watch the demo
 
-The GIF **plays on this page**. Cursor’s recorder logo and end-of-video cube bumper have been removed.
+The preview **plays on this page**. The Cursor cube end-card is not in the file.
 
 <p align="center">
   <img src="sentinel-rag/docs/demo.gif" alt="Sentinel-RAG walkthrough — plays inline" width="920"/>
 </p>
 
 <p align="center">
-  <a href="https://github.com/TechieGoku2623/Sentinal_RAG/blob/main/sentinel-rag/docs/demo.mp4"><strong>▶ Open HD player on GitHub</strong></a>
+  <a href="https://github.com/TechieGoku2623/Sentinal_RAG/blob/main/sentinel-rag/docs/demo.mp4"><strong>HD in-browser player</strong></a>
   ·
-  <a href="sentinel-rag/docs/watch.html">local HTML player</a>
-  ·
-  <a href="sentinel-rag/docs/demo.webp">WebP</a>
+  <a href="sentinel-rag/docs/watch.html">HTML player</a>
 </p>
 
 | Time in clip | What you are seeing | Why it matters |
