@@ -41,6 +41,8 @@ Its core innovation is a *five-layer safety pipeline*: retrieve → generate →
 
 **Video walkthrough:** [`docs/demo.mp4`](docs/demo.mp4) (live UI recording of the portfolio + workspace). Generated storyboard clips remain available via `python scripts/generate_walkthrough_video.py`.
 
+[![Sentinel-RAG demo](docs/demo-poster.jpg)](docs/demo.mp4)
+
 <video src="docs/demo.mp4" controls width="100%"></video>
 
 *Sentinel-RAG validating clinical protocols with confidence scoring, self-correction, and human escalation*

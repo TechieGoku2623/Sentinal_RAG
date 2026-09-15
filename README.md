@@ -6,6 +6,8 @@ This GitHub repository keeps the product in `sentinel-rag/` so the layout matche
 
 ## Demo
 
+[![Sentinel-RAG demo](sentinel-rag/docs/demo-poster.jpg)](sentinel-rag/docs/demo.mp4)
+
 <video src="sentinel-rag/docs/demo.mp4" controls width="100%"></video>
 
 If the player does not render on GitHub, download **[sentinel-rag/docs/demo.mp4](sentinel-rag/docs/demo.mp4)**.
