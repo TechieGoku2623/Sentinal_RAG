@@ -18,16 +18,10 @@ This GitHub repository keeps the product in [`sentinel-rag/`](sentinel-rag/) so 
 
 ## Watch the demo
 
-The preview **plays on this page**. The Cursor cube end-card is not in the file.
+This walkthrough **plays on this page** — it does not download a file.
 
 <p align="center">
   <img src="sentinel-rag/docs/demo.gif" alt="Sentinel-RAG walkthrough — plays inline" width="920"/>
-</p>
-
-<p align="center">
-  <a href="https://github.com/TechieGoku2623/Sentinal_RAG/blob/main/sentinel-rag/docs/demo.mp4"><strong>HD in-browser player</strong></a>
-  ·
-  <a href="sentinel-rag/docs/watch.html">HTML player</a>
 </p>
 
 | Time in clip | What you are seeing | Why it matters |
