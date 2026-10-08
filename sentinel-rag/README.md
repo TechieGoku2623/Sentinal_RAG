@@ -383,7 +383,7 @@ Every run appends a feature row to `data/feedback/confidence_log.csv` (confidenc
 
 **Devasai Pranatheswar**
 MS in Analytics, Northeastern University
-🔗 [LinkedIn](https://www.linkedin.com/in/devasai-pranatheswar) · ✉️ devasai.pranatheswar@example.com
+🔗 [LinkedIn](https://www.linkedin.com/in/devasai-pranatheswar) · ✉️ pranathesw@gmail.com
 
 ---
 

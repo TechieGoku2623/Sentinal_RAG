@@ -54,27 +54,18 @@
 
 ---
 
-## 21st.dev Magic — where generated components go
+## Where interface code lives
 
 | Surface | Path | Notes |
 |---------|------|--------|
 | Landing UI | `landing/components/` | Map to Cobalt tokens in `tokens.css` |
-| shadcn primitives | `landing/components/ui/` | Install via `npx shadcn@latest add <component>` |
-| Streamlit | `ui/theme.py`, `ui/command_center.py` | Manual port — Magic is React-only |
+| shadcn primitives | `landing/components/ui/` | Add with `npx shadcn@latest add <component>` |
+| Streamlit | `ui/theme.py`, `ui/command_center.py` | Separate theme from the React landing |
 
-After Magic generates a component: replace hardcoded hex with `var(--color-*)` from `tokens.css`.
+When adding a component, replace hardcoded hex with `var(--color-*)` from `tokens.css`.
 
 ---
 
 ## Commands
 
-```powershell
-# UI UX Pro Max — refresh recommendations
-python .cursor/skills/ui-ux-pro-max/scripts/search.py "healthcare clinical SaaS dashboard" --design-system -p "Sentinel-RAG"
-
-# Stack-specific (landing)
-python .cursor/skills/ui-ux-pro-max/scripts/search.py "dashboard stat cards" --stack nextjs
-
-# Hallmark slop audit
-# Streamlit → Build studio → audit
-```
+Visual decisions live in `tokens.css`. Landing components should use those variables instead of hardcoded hex. The Streamlit command center is themed in `ui/theme.py`.
